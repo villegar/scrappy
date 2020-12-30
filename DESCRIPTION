@@ -1,0 +1,16 @@
+Package: scrappy
+Title: A Simple Web Scraper
+Version: 0.0.0.9000
+Authors@R: c(
+    person(given = "Roberto",
+           family = "Villegas-Diaz",
+           role = c("aut", "cre"),
+           email = "r.villegas-diaz@reading.ac.uk",
+           comment = c(ORCID = "0000-0001-5036-8661")))
+Description: A group of functions to scrape data from different websites, for 
+    academic purposes.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
