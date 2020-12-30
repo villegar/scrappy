@@ -11,7 +11,9 @@ newa_nrcc(
   station,
   base = "http://newa.nrcc.cornell.edu/newaLister",
   interval = "hly",
-  sleep = 6
+  sleep = 6,
+  table_id = "#dtable",
+  path = getwd()
 )
 }
 \arguments{
@@ -31,6 +33,12 @@ newa_nrcc(
 
 \item{sleep}{Numeric value with the number of seconds to wait for the page
 to load the results (default: 6 seconds).}
+
+\item{table_id}{String with the unique HTML ID assigned to the table
+containing the data (default: #dtable)}
+
+\item{path}{String with path to location where CSV files should be stored
+(default: \code{getwd()}).}
 }
 \description{
 Retrieve Weather data from the Network for Environment and Weather
