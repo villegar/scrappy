@@ -63,7 +63,10 @@ rD$server$stop()
 
 Post-processing: combine individual CSV files by station name:
 ```{r, eval = FALSE}
-for (st in unique(combinations$station)) {
+stations <- c("acc", "kalb", "alb")
+states <- c("NY", "NY", "NY")
+for (s in seq_len(length(stations))) {
+  st <- stations[s]
   message("Processing: ", st)
   files <- list.files(outputdir, pattern = st, full.names = TRUE)
   if (length(files) > 0) {
@@ -77,6 +80,7 @@ for (st in unique(combinations$station)) {
         combined_data <- rbind(combined_data, aux)
       }
     }
+    combined_data$State <- states[s]
     write.csv(combined_data, paste0(st, ".csv"), row.names = FALSE)
   }
 }
