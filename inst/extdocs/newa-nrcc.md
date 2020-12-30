@@ -29,7 +29,7 @@ knitr::kable(head(combinations, 10))
 | acc     | 2015 |     9 | FALSE      |
 | acc     | 2015 |    10 | FALSE      |
 
-Create a RSelenium session
+Create RSelenium session
 
 ``` r
 # Create RSelenium session

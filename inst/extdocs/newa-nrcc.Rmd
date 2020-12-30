@@ -22,7 +22,7 @@ combinations <- data.frame(station = rep(stations, each = length(years) * length
 knitr::kable(head(combinations, 10))
 ```
 
-Create a RSelenium session
+Create RSelenium session
 ```{r, eval = FALSE}
 # Create RSelenium session
 rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
