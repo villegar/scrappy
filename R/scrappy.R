@@ -15,6 +15,10 @@
 #' @param interval String with data interval (default: hly, hourly).
 #' @param sleep Numeric value with the number of seconds to wait for the page
 #'     to load the results (default: 6 seconds).
+#' @param table_id String with the unique HTML ID assigned to the table
+#'     containing the data (default: #dtable)
+#' @param path String with path to location where CSV files should be stored
+#'     (default: \code{getwd()}).
 #'
 #' @export
 #'
@@ -28,7 +32,9 @@ newa_nrcc <- function(client,
                       station,
                       base = "http://newa.nrcc.cornell.edu/newaLister",
                       interval = "hly",
-                      sleep = 6) {
+                      sleep = 6,
+                      table_id = "#dtable",
+                      path = getwd()) {
   # Local binding
   . <- NULL
   # Navigate to website
@@ -37,12 +43,15 @@ newa_nrcc <- function(client,
   Sys.sleep(sleep)
   # Create output filename
   file <- paste0(station, "-", interval, "-", year, "-", month, ".csv")
+  file <- file.path(path, file)
+  # Create node ID
+  node <- paste0("table", table_id)
   # Parse HTML code and save CSV file
   client$getPageSource()[[1]] %>%
     xml2::read_html() %>% # parse HTML
-    rvest::html_nodes("table.dataTable") %>% # extract table nodes, "dataTable"
-    .[2] %>% # keep the second of these tables
-    .[[1]] %>% # keep the second element of this list
+    rvest::html_nodes(node) %>% # extract table node
+    # .[2] %>% # keep the second of these tables
+    # .[[1]] %>% # keep the second element of this list
     rvest::html_table(fill = TRUE) %>%
     write.csv(file, row.names = FALSE)
 }
