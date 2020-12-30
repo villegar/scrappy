@@ -12,8 +12,6 @@ combinations <- data.frame(station = rep(stations, each = length(years) * length
                            year = rep(years, each = length(months)),
                            month = months,
                            downloaded = FALSE)
-
-knitr::kable(head(combinations, 10))
 ```
 
 | station | year | month | downloaded |
@@ -95,3 +93,50 @@ for (s in seq_len(length(stations))) {
   }
 }
 ```
+
+#### Bonus
+
+List the station names:
+
+``` r
+# Import pipe
+`%>%` <- scrappy::`%>%`
+
+# Create RSelenium session
+rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
+
+rD$client$navigate("http://newa.cornell.edu/index.php?page=station-pages")
+Sys.sleep(5)
+aux <- rD$client$getPageSource()[[1]] %>%
+    xml2::read_html() %>% # parse HTML
+    rvest::html_nodes("table.table") 
+
+station_code <- aux %>% 
+  rvest::html_nodes("a") %>%
+  rvest::html_attr("href") %>%
+  gsub(pattern = ".*=", replacement = "")
+
+stations <- aux %>%
+  rvest::html_table(header = TRUE) %>%
+  as.data.frame() %>%
+  tidyr::separate(col = 1, into = c("name", "state"), sep = ",")
+stations$code <- station_code
+
+# Stop server
+rD$server$stop()
+```
+
+    ## [1] TRUE
+
+| name          | state | code    |
+| :------------ | :---- | :------ |
+| Accord        | NY    | acc     |
+| Aetna/Fremont | MI    | ew\_aet |
+| Afton         | MN    | mn\_aft |
+| Akron/Canton  | OH    | kcak    |
+| Albany        | NY    | kalb    |
+| Albion        | NY    | alb     |
+| Albion        | MI    | ew\_alb |
+| Allegan       | MI    | ew\_alg |
+| Allentown     | PA    | kabe    |
+| Alpena (AP)   | MI    | kapn    |
