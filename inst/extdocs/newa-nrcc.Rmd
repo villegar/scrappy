@@ -60,3 +60,24 @@ for (i in seq_len(nrow(combinations))) {
 # Stop server
 rD$server$stop()
 ```
+
+Post-processing: combine individual CSV files by station name:
+```{r, eval = FALSE}
+for (st in unique(combinations$station)) {
+  message("Processing: ", st)
+  files <- list.files(outputdir, pattern = st, full.names = TRUE)
+  if (length(files) > 0) {
+    message(length(files), " files found...")
+    combined_data <- NULL
+    for(f in files) {
+      aux <- read.csv(f)
+      if (is.null(combined_data)) {
+        combined_data <- aux
+      } else {
+        combined_data <- rbind(combined_data, aux)
+      }
+    }
+    write.csv(combined_data, paste0(st, ".csv"), row.names = FALSE)
+  }
+}
+```
