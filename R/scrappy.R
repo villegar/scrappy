@@ -47,11 +47,15 @@ newa_nrcc <- function(client,
   # Create node ID
   node <- paste0("table", table_id)
   # Parse HTML code and save CSV file
-  client$getPageSource()[[1]] %>%
+  out <- client$getPageSource()[[1]] %>%
     xml2::read_html() %>% # parse HTML
     rvest::html_nodes(node) %>% # extract table node
     # .[2] %>% # keep the second of these tables
     # .[[1]] %>% # keep the second element of this list
-    rvest::html_table(fill = TRUE) %>%
-    write.csv(file, row.names = FALSE)
+    rvest::html_table(fill = TRUE)
+  original_names <- c(names(out[[1]]), "Station")
+  out <- as.data.frame(out)
+  out$station <- station
+  colnames(out) <- original_names
+  write.csv(out, file, row.names = FALSE)
 }
