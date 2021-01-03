@@ -16,7 +16,7 @@
 #' @param sleep Numeric value with the number of seconds to wait for the page
 #'     to load the results (default: 6 seconds).
 #' @param table_id String with the unique HTML ID assigned to the table
-#'     containing the data (default: #dtable)
+#'     containing the data (default: \code{#dtable})
 #' @param path String with path to location where CSV files should be stored
 #'     (default: \code{getwd()}).
 #'
@@ -24,7 +24,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' scrappy::newa_nrcc(my_client, 2020, 12, "gbe")
+#' # Create RSelenium session
+#' rD <- RSelenium::rsDriver(browser = "firefox", port = 4544L, verbose = FALSE)
+#' # Retrieve data for the Geneva (Bejo) station on 2020/12
+#' scrappy::newa_nrcc(rD$client, 2020, 12, "gbe")
+#' # Stop server
+#' rD$server$stop()
 #' }
 newa_nrcc <- function(client,
                       year,
