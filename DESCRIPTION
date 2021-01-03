@@ -1,6 +1,6 @@
 Package: scrappy
 Title: A Simple Web Scraper
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: c(
     person(given = "Roberto",
            family = "Villegas-Diaz",
@@ -22,7 +22,3 @@ Imports:
     magrittr,
     rvest,
     xml2
-Suggests: 
-    knitr,
-    rmarkdown
-VignetteBuilder: knitr
