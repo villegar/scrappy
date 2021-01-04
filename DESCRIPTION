@@ -5,7 +5,7 @@ Authors@R: c(
     person(given = "Roberto",
            family = "Villegas-Diaz",
            role = c("aut", "cre"),
-           email = "r.villegas-diaz@reading.ac.uk",
+           email = "villegas.roberto@hotmail.com",
            comment = c(ORCID = "0000-0001-5036-8661")))
 Description: A group of functions to scrape data from different websites, for 
     academic purposes.
