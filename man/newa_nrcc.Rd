@@ -35,7 +35,7 @@ newa_nrcc(
 to load the results (default: 6 seconds).}
 
 \item{table_id}{String with the unique HTML ID assigned to the table
-containing the data (default: #dtable)}
+containing the data (default: \code{#dtable})}
 
 \item{path}{String with path to location where CSV files should be stored
 (default: \code{getwd()}).}
@@ -46,6 +46,11 @@ Applications (NEWA) at Cornell University.
 }
 \examples{
 \dontrun{
-scrappy::newa_nrcc(my_client, 2020, 12, "gbe")
+# Create RSelenium session
+rD <- RSelenium::rsDriver(browser = "firefox", port = 4544L, verbose = FALSE)
+# Retrieve data for the Geneva (Bejo) station on 2020/12
+scrappy::newa_nrcc(rD$client, 2020, 12, "gbe")
+# Stop server
+rD$server$stop()
 }
 }
