@@ -19,6 +19,10 @@
 #'     containing the data (default: \code{#dtable})
 #' @param path String with path to location where CSV files should be stored
 #'     (default: \code{getwd()}).
+#' @param save_file Boolean flag to indicate whether or not the output should
+#'     be stored as a CSV file.
+#'
+#' @return Tibble with the data retrieved from the server.
 #'
 #' @export
 #'
@@ -39,7 +43,8 @@ newa_nrcc <- function(client,
                       interval = "hly",
                       sleep = 6,
                       table_id = "#dtable",
-                      path = getwd()) {
+                      path = getwd(),
+                      save_file = TRUE) {
   # Local binding
   . <- NULL
   # Navigate to website
@@ -60,5 +65,7 @@ newa_nrcc <- function(client,
   out <- as.data.frame(out)
   out$station <- station
   colnames(out) <- original_names
-  write.csv(out, file, row.names = FALSE)
+  if (save_file)
+    write.csv(out, file, row.names = FALSE)
+  invisible(out)
 }
