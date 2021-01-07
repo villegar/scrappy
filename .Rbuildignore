@@ -9,3 +9,4 @@
 ^inst$
 ^extdocs$
 ^cran-comments\.md$
+^CRAN-RELEASE$
