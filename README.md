@@ -16,15 +16,15 @@ different websites for academic purposes.
 
 ## Installation
 
-You can(not) install the released version of scrappy from
+You can install the released version of scrappy from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
 install.packages("scrappy")
 ```
 
-And the development version from [GitHub](https://github.com/scrappy)
-with:
+And the development version from
+[GitHub](https://github.com/villegar/scrappy) with:
 
 ``` r
 # install.packages("devtools")
