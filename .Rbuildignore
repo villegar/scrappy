@@ -10,3 +10,4 @@
 ^extdocs$
 ^cran-comments\.md$
 ^CRAN-RELEASE$
+^R\.ignore$
