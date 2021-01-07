@@ -7,5 +7,6 @@
 #' @keywords internal
 #' @export
 #' @importFrom magrittr %>%
+#' @return Result of the \code{rhs} expression.
 #' @usage lhs \%>\% rhs
 NULL
