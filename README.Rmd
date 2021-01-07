@@ -52,7 +52,7 @@ rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
 out <- scrappy::newa_nrcc(client = rD$client, 
                           year = 2020, 
                           month = 12, # December
-                          station = "gbe", # Geneve (Bejo) station
+                          station = "gbe", # Geneva (Bejo) station
                           save_file = FALSE) # Don't save output to a CSV file
 # Stop server
 rD$server$stop()
