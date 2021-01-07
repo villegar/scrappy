@@ -13,7 +13,8 @@ newa_nrcc(
   interval = "hly",
   sleep = 6,
   table_id = "#dtable",
-  path = getwd()
+  path = getwd(),
+  save_file = TRUE
 )
 }
 \arguments{
@@ -39,6 +40,12 @@ containing the data (default: \code{#dtable})}
 
 \item{path}{String with path to location where CSV files should be stored
 (default: \code{getwd()}).}
+
+\item{save_file}{Boolean flag to indicate whether or not the output should
+be stored as a CSV file.}
+}
+\value{
+Tibble with the data retrieved from the server.
 }
 \description{
 Retrieve Weather data from the Network for Environment and Weather
