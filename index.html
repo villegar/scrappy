@@ -70,9 +70,10 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="scrappy-a-simple-web-scraper" class="section level1">
+<div id="scrappy-a-simple-web-scraper-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#scrappy-a-simple-web-scraper" class="anchor"></a>scrappy: A Simple Web Scraper</h1></div>
+<a href="#scrappy-a-simple-web-scraper-" class="anchor"></a>scrappy: A Simple Web Scraper <img src="https://raw.githubusercontent.com/villegar/scrappy/main/inst/images/logo.png" alt="logo" align="right" height="200px/">
+</h1></div>
 <!-- badges: start -->
 
 <p>The goal of scrappy is to provide simple functions to scrape data from different websites for academic purposes.</p>
@@ -99,12 +100,163 @@
 <span class="va">rD</span> <span class="op">&lt;-</span> <span class="fu">RSelenium</span><span class="fu">::</span><span class="fu">rsDriver</span><span class="op">(</span>browser <span class="op">=</span> <span class="st">"firefox"</span>, port <span class="op">=</span> <span class="fl">4548L</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="co"># Call scrappy</span>
-<span class="fu">scrappy</span><span class="fu">::</span><span class="fu"><a href="reference/newa_nrcc.html">newa_nrcc</a></span><span class="op">(</span>client <span class="op">=</span> <span class="va">rD</span><span class="op">$</span><span class="va">client</span>, 
-                   year <span class="op">=</span> <span class="fl">2020</span>,
-                   month <span class="op">=</span> <span class="fl">12</span>,
-                   station <span class="op">=</span> <span class="st">"gbe"</span><span class="op">)</span>
+<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">scrappy</span><span class="fu">::</span><span class="fu"><a href="reference/newa_nrcc.html">newa_nrcc</a></span><span class="op">(</span>client <span class="op">=</span> <span class="va">rD</span><span class="op">$</span><span class="va">client</span>, 
+                          year <span class="op">=</span> <span class="fl">2020</span>, 
+                          month <span class="op">=</span> <span class="fl">12</span>, <span class="co"># December</span>
+                          station <span class="op">=</span> <span class="st">"gbe"</span>, <span class="co"># Geneve (Bejo) station</span>
+                          save_file <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># Don't save output to a CSV file</span>
 <span class="co"># Stop server</span>
-<span class="va">rD</span><span class="op">$</span><span class="va">server</span><span class="op">$</span><span class="kw">stop</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="va">rD</span><span class="op">$</span><span class="va">server</span><span class="op">$</span><span class="kw">stop</span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<p>Partial output from the previous example:</p>
+<table class="table">
+<colgroup>
+<col width="13%">
+<col width="8%">
+<col width="10%">
+<col width="15%">
+<col width="4%">
+<col width="9%">
+<col width="12%">
+<col width="13%">
+<col width="8%">
+<col width="4%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Date/Time</th>
+<th align="right">Air Temp (℉)</th>
+<th align="right">Precip (inches)</th>
+<th align="right">Leaf Wetness (minutes)</th>
+<th align="right">RH (%)</th>
+<th align="right">Wind Spd (mph)</th>
+<th align="right">Wind Dir (degrees)</th>
+<th align="right">Solar Rad (langleys)</th>
+<th align="right">Dewpoint (℉)</th>
+<th align="left">Station</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">12/31/2020 23:00 EST</td>
+<td align="right">33.1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">82</td>
+<td align="right">2.8</td>
+<td align="right">264</td>
+<td align="right">0</td>
+<td align="right">28</td>
+<td align="left">gbe</td>
+</tr>
+<tr class="even">
+<td align="left">12/31/2020 22:00 EST</td>
+<td align="right">33.0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">80</td>
+<td align="right">3.3</td>
+<td align="right">250</td>
+<td align="right">0</td>
+<td align="right">28</td>
+<td align="left">gbe</td>
+</tr>
+<tr class="odd">
+<td align="left">12/31/2020 21:00 EST</td>
+<td align="right">32.8</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">81</td>
+<td align="right">2.6</td>
+<td align="right">261</td>
+<td align="right">0</td>
+<td align="right">28</td>
+<td align="left">gbe</td>
+</tr>
+<tr class="even">
+<td align="left">12/31/2020 20:00 EST</td>
+<td align="right">32.5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">84</td>
+<td align="right">1.7</td>
+<td align="right">277</td>
+<td align="right">0</td>
+<td align="right">28</td>
+<td align="left">gbe</td>
+</tr>
+<tr class="odd">
+<td align="left">12/31/2020 19:00 EST</td>
+<td align="right">32.9</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">81</td>
+<td align="right">2.1</td>
+<td align="right">279</td>
+<td align="right">0</td>
+<td align="right">28</td>
+<td align="left">gbe</td>
+</tr>
+<tr class="even">
+<td align="left">12/31/2020 18:00 EST</td>
+<td align="right">33.3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">79</td>
+<td align="right">3.0</td>
+<td align="right">272</td>
+<td align="right">0</td>
+<td align="right">28</td>
+<td align="left">gbe</td>
+</tr>
+<tr class="odd">
+<td align="left">12/31/2020 17:00 EST</td>
+<td align="right">33.5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">78</td>
+<td align="right">3.9</td>
+<td align="right">274</td>
+<td align="right">1</td>
+<td align="right">27</td>
+<td align="left">gbe</td>
+</tr>
+<tr class="even">
+<td align="left">12/31/2020 16:00 EST</td>
+<td align="right">34.1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">74</td>
+<td align="right">4.9</td>
+<td align="right">272</td>
+<td align="right">7</td>
+<td align="right">27</td>
+<td align="left">gbe</td>
+</tr>
+<tr class="odd">
+<td align="left">12/31/2020 15:00 EST</td>
+<td align="right">33.8</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">72</td>
+<td align="right">7.1</td>
+<td align="right">277</td>
+<td align="right">8</td>
+<td align="right">26</td>
+<td align="left">gbe</td>
+</tr>
+<tr class="even">
+<td align="left">12/31/2020 14:00 EST</td>
+<td align="right">34.4</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">70</td>
+<td align="right">7.9</td>
+<td align="right">276</td>
+<td align="right">13</td>
+<td align="right">26</td>
+<td align="left">gbe</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -137,7 +289,7 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/villegar/scrappy"><img src="https://img.shields.io/badge/devel%20version-0.0.0.9000-yellow.svg"></a></li>
+<li><a href="https://github.com/villegar/scrappy"><img src="https://img.shields.io/badge/devel%20version-0.0.1-yellow.svg"></a></li>
 <li><a href="https://github.com/villegar/scrappy/actions"><img src="https://github.com/villegar/scrappy/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 <li><a href="https://cran.r-project.org/package=scrappy"><img src="https://www.r-pkg.org/badges/version/scrappy?color=black"></a></li>
 </ul>
