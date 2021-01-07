@@ -12,7 +12,8 @@ knitr::opts_chunk$set(
 )
 ```
 
-# scrappy: A Simple Web Scraper
+# scrappy: A Simple Web Scraper <img src="https://raw.githubusercontent.com/villegar/scrappy/main/inst/images/logo.png" alt="logo" align="right" height=200px/>
+
 
 <!-- badges: start -->
 `r badger::badge_devel("villegar/scrappy", "yellow")`
@@ -43,15 +44,21 @@ devtools::install_github("villegar/scrappy")
 The Network for Environment and Weather Applications at Cornell University.
 Website: http://newa.cornell.edu
 
-```{r example, eval = FALSE}
+```{r example, message = FALSE}
 # Create RSelenium session
 rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
 
 # Call scrappy
-scrappy::newa_nrcc(client = rD$client, 
-                   year = 2020,
-                   month = 12,
-                   station = "gbe")
+out <- scrappy::newa_nrcc(client = rD$client, 
+                          year = 2020, 
+                          month = 12, # December
+                          station = "gbe", # Geneve (Bejo) station
+                          save_file = FALSE) # Don't save output to a CSV file
 # Stop server
 rD$server$stop()
+```
+
+Partial output from the previous example:
+```{r, echo = FALSE}
+knitr::kable(head(out, 10))
 ```
