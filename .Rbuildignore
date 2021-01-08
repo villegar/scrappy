@@ -13,3 +13,4 @@
 ^R\.ignore$
 ^inst/extdocs$
 ^inst/images$
+^data-raw$
