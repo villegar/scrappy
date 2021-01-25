@@ -1,4 +1,4 @@
-# scrappy (development version)
+# scrappy 0.0.2
 
 # scrappy 0.0.1
 
