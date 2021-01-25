@@ -16,9 +16,9 @@ knitr::opts_chunk$set(
 
 
 <!-- badges: start -->
+`r badger::badge_cran_release("scrappy", "black")`
 `r badger::badge_devel("villegar/scrappy", "yellow")`
 `r badger::badge_github_actions("villegar/scrappy")`
-`r badger::badge_cran_release("scrappy", "black")`
 <!-- badges: end -->
 
 The goal of scrappy is to provide simple functions to scrape data from different
