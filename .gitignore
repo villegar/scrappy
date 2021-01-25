@@ -40,3 +40,4 @@ vignettes/*.pdf
 .Rproj.user
 inst/doc
 docs
+cran-comments.md

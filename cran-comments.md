@@ -7,6 +7,4 @@
 
 0 errors | 0 warnings | 1 note
 
-* This is a resubmission and new release.
-
-* As requested by reviewer, I have updated the return description for each function.
+* This is a new release.
