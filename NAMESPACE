@@ -2,5 +2,6 @@
 
 export("%>%")
 export(newa_nrcc)
+export(newa_nrcc3)
 importFrom(magrittr,"%>%")
 importFrom(utils,write.csv)
