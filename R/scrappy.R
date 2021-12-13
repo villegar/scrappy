@@ -79,7 +79,8 @@ newa_nrcc <- function(client,
 #' @param month Numeric value with the start month.
 #' @param day Numeric value with the start day.
 #' @param hour Numeric value with the start hour.
-#' @param station String with the station abbreviation.
+#' @param station String with the station abbreviation. Check
+#'     \code{scrappy::newa_stations} for a list of stations and abbreviations.
 #' @param base Base URL
 #'     (default: \url{https://hrly.nrcc.cornell.edu/stnHrly}).
 # @param path String with path to location where CSV files should be stored
@@ -88,11 +89,11 @@ newa_nrcc <- function(client,
 #'     be stored as a CSV file.
 #'
 #' @return List of data frames with \code{hourly}, \code{daily},
-#'     \code{forecast}, and daily forecast (\code{daily_forecast}) data.
+#'     \code{hourly_forecast}, and daily forecast (\code{daily_forecast}) data.
 #' @export
 #'
 #' @examples
-#' newa_nrcc3(2021, 12, 01, 00, "gbe")
+#' scrappy::newa_nrcc3(2021, 12, 01, 00, "gbe")
 newa_nrcc3 <- function(year,
                        month,
                        day,
@@ -116,7 +117,6 @@ newa_nrcc3 <- function(year,
                  pad_zeros(hour, 2),
                  '",\n',
                  '"edate": "now"\n}\n\n')
-  # cat(body)
   tryCatch({
     request <- httr::POST("https://hrly.nrcc.cornell.edu/stnHrly",
                           body = body)
@@ -130,7 +130,7 @@ newa_nrcc3 <- function(year,
     dlyData <- contents$dlyData %>%
       magrittr::set_colnames(contents$dlyFields) %>%
       tibble::as_tibble()
-    # Extract forecast data
+    # Extract hourly forecast data
     fcstData <- contents$fcstData %>%
       magrittr::set_colnames(contents$fcstFields) %>%
       tibble::as_tibble()
@@ -140,9 +140,9 @@ newa_nrcc3 <- function(year,
       tibble::as_tibble()
     return(list(hourly = hrlyData,
                 daily = dlyData,
-                forecast = fcstData,
+                hourly_forecast = fcstData,
                 daily_forecast = dlyFcstData))
   }, error = function(e) {
-    error(e)
+    warning(e)
   })
 }
