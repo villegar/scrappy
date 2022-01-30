@@ -120,7 +120,11 @@ newa_nrcc3 <- function(year,
   tryCatch({
     request <- httr::POST("https://hrly.nrcc.cornell.edu/stnHrly",
                           body = body)
-    contents <- httr::content(request) %>%
+    contents <- httr::content(request)
+    if (typeof(contents) == "character" &&
+        grepl("Invalid Request|sid", contents))
+      stop("'", station, "' is not a valid station code", call. = FALSE)
+    contents <- contents %>%
       jsonlite::fromJSON()
     # Extract hourly data
     hrlyData <- contents$hrlyData %>%
