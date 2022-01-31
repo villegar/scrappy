@@ -22,20 +22,20 @@ newa_nrcc3(
 
 \item{hour}{Numeric value with the start hour.}
 
-\item{station}{String with the station abbreviation.}
+\item{station}{String with the station abbreviation. Check
+\code{scrappy::newa3_stations} for a list of stations and abbreviations.}
 
 \item{base}{Base URL
-(default: \url{https://hrly.nrcc.cornell.edu/stnHrly}).
-be stored as a CSV file.}
+(default: \url{https://hrly.nrcc.cornell.edu/stnHrly}).}
 }
 \value{
 List of data frames with \code{hourly}, \code{daily},
-\code{forecast}, and daily forecast (\code{daily_forecast}) data.
+\code{hourly_forecast}, and daily forecast (\code{daily_forecast}) data.
 }
 \description{
 Retrieve Weather data from the Network for Environment and Weather
 Applications (NEWA) version 3.0 at Cornell University.
 }
 \examples{
-newa_nrcc3(2021, 12, 01, 00, "gbe")
+scrappy::newa_nrcc3(2021, 12, 01, 00, "gbe")
 }
