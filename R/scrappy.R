@@ -1,3 +1,6 @@
+#' @keywords internal
+"_PACKAGE"
+
 #' Retrieve data from NEWA at Cornell University
 #'
 #' Retrieve Weather data from the Network for Environment and Weather
@@ -80,13 +83,9 @@ newa_nrcc <- function(client,
 #' @param day Numeric value with the start day.
 #' @param hour Numeric value with the start hour.
 #' @param station String with the station abbreviation. Check
-#'     \code{scrappy::newa_stations} for a list of stations and abbreviations.
+#'     \code{scrappy::newa3_stations} for a list of stations and abbreviations.
 #' @param base Base URL
 #'     (default: \url{https://hrly.nrcc.cornell.edu/stnHrly}).
-# @param path String with path to location where CSV files should be stored
-#     (default: \code{getwd()}).
-# @param save_file Boolean flag to indicate whether or not the output should
-#'     be stored as a CSV file.
 #'
 #' @return List of data frames with \code{hourly}, \code{daily},
 #'     \code{hourly_forecast}, and daily forecast (\code{daily_forecast}) data.
@@ -99,9 +98,7 @@ newa_nrcc3 <- function(year,
                        day,
                        hour,
                        station,
-                       base = "https://hrly.nrcc.cornell.edu/stnHrly"#,
-                       # path = getwd(),
-                       # save_file = TRUE
+                       base = "https://hrly.nrcc.cornell.edu/stnHrly"
                        ) {
   # Local binding
   pad_zeros <- function(val, digits = 2) {
