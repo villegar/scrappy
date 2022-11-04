@@ -14,27 +14,48 @@
 #' @examples
 #' duration2datetime("a day ago")
 #' duration2datetime("an hour ago")
+#' duration2datetime("a week ago")
+#' duration2datetime("a month ago")
+#' duration2datetime("a year ago")
 #' duration2datetime("2 days ago")
 #' duration2datetime("2 hours ago")
+#' duration2datetime("2 weeks ago")
+#' duration2datetime("2 months ago")
+#' duration2datetime("2 years ago")
 duration2datetime <- function(str,
                               ref_time = Sys.time(),
                               output_format = "%Y-%m-%d %H:%M:%S %Z") {
-  if (str == "a day ago")  {
-    time_diff <- as.difftime(1, units = "days")
-  } else if (str == "an hour ago") {
-    time_diff <- as.difftime(1, units = "hours")
-  } else if (stringr::str_detect(str, "hours")) {
-    hours_ago <- str %>%
-      stringr::str_remove_all("hour[s]* ago") %>%
+  if (stringr::str_detect(str, "month")) {
+    value <- str %>%
+      stringr::str_remove("month[s]* ago$") %>%
+      stringr::str_replace("an|a", "1") %>%
       stringr::str_squish() %>%
       as.integer()
-    time_diff <- as.difftime(hours_ago, units = "hours")
-  } else if (stringr::str_detect(str, "days")) {
-    days_ago <- str %>%
-      stringr::str_remove_all("day[s]* ago") %>%
+    time_diff <- months(value)
+  } else if (stringr::str_detect(str, "year")) {
+    value <- str %>%
+      stringr::str_remove("year[s]* ago$") %>%
+      stringr::str_replace("an|a", "1") %>%
       stringr::str_squish() %>%
       as.integer()
-    time_diff <- as.difftime(days_ago, units = "days")
+    time_diff <- months(12 * value)
+  } else if (stringr::str_detect(str, "^an|^a")) {
+    units <- str %>%
+      stringr::str_remove_all("^an|^a") %>%
+      stringr::str_remove("ago$") %>%
+      stringr::str_squish()
+    time_diff <- as.difftime(1, units = stringr::str_c(units, "s"))
+  } else if (stringr::str_detect("hour|day|week")) {
+    units <- str %>%
+      stringr::str_remove_all("ago") %>%
+      stringr::str_squish() %>%
+      stringr::str_extract("[a-zA-Z]+$")
+    value <- str %>%
+      stringr::str_remove("ago$") %>%
+      stringr::str_remove(units) %>%
+      stringr::str_squish() %>%
+      as.integer()
+    time_diff <- as.difftime(value, units = units)
   } else {
     return(NA)
   }
