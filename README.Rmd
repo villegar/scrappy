@@ -40,11 +40,33 @@ devtools::install_github("villegar/scrappy")
 ```
 ## Example
 
+__NOTE:__ To run the following examples on your computer, you need to download
+and install Mozilla Firefox (https://www.mozilla.org/en-GB/firefox/new/). Alternatively,
+you can replace the value of `browser` in the call to `RSelenium::rsDriver`.
+
+```{r run-examples-hidden-code, echo = FALSE, message = FALSE, output = FALSE, cache = TRUE}
+# Create RSelenium session
+rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
+
+# Call scrappy
+out_newa <- scrappy::newa_nrcc(client = rD$client, 
+                               year = 2020, 
+                               month = 12, # December
+                               station = "gbe", # Geneva (Bejo) station
+                               save_file = FALSE) # Don't save output
+
+out_gmaps <- scrappy::google_maps(client = rD$client,
+                                  name = "Sefton Park",
+                                  max_reviews = 20)
+# Stop server
+conn <- rD$server$stop()
+```
+
 ### NEWA @ Cornell University
 The Network for Environment and Weather Applications at Cornell University.
 Website: http://newa.cornell.edu
 
-```{r example, message = FALSE}
+```{r example-newa, eval = FALSE}
 # Create RSelenium session
 rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
 
@@ -60,5 +82,29 @@ rD$server$stop()
 
 Partial output from the previous example:
 ```{r, echo = FALSE}
-knitr::kable(head(out, 10))
+knitr::kable(head(out_newa, 10))
+```
+
+### Google Maps
+
+Extract the reviews for Sefton Park in Liverpool (only the 20 most recent):
+```{r example-google-maps, eval = FALSE}
+# Create RSelenium session
+rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
+
+# Call scrappy
+out <- scrappy::google_maps(client = rD$client,
+                            name = "Sefton Park",
+                            max_reviews = 20)
+# Stop server
+rD$server$stop()
+```
+
+Output after removing original authors' names and URL to their profiles:
+```{r, echo = FALSE}
+`%>%` <- scrappy::`%>%`
+out_gmaps %>%
+  dplyr::mutate(author = paste0("Author ", seq_along(author)),
+                author_url = "") %>%
+knitr::kable()
 ```
