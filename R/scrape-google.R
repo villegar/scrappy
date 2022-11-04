@@ -118,7 +118,7 @@ google_maps <-
     scroll_reviews(client)
   }
   parsed_reviews %>%
-    dplyr::select(-parsed_reviews)
+    dplyr::select(-html_el_id)
 }
 
 #' Handle cookies
@@ -220,7 +220,7 @@ parse_reviews <- function(reviews) {
       rvest::html_element(".rsqaWe") %>%
       rvest::html_text() %>%
       stringr::str_squish()
-    review_date_downloaded <- Sys.Date()
+    review_date_downloaded <- Sys.time()
     review_date_absolute <- review_date_relative %>%
       scrappy::duration2datetime(ref_time = review_date_downloaded)
     tibble::tibble(
@@ -253,7 +253,7 @@ scroll_reviews <- function(client,
                            value = "div.m6QErb.DxyBCb.kA9KIf.dS8AEf",
                            scroll_px = 1000,
                            sleep = 1) {
-  scrollable_div <- client$findElement(using, scroll_ele_tag)
+  scrollable_div <- client$findElement(using, value)
   client$executeScript(paste0("arguments[0].scrollBy(0,", scroll_px, ");"),
                        args = list(scrollable_div))
   Sys.sleep(sleep)
@@ -262,7 +262,7 @@ scroll_reviews <- function(client,
 #' Sort reviews
 #'
 #' @param value_sort_btn String with css tag or xpath for the Sort button.
-#' @param value_sort_option String with css tag or xpath for the Sort options.
+#' @param value_sort_options String with css tag or xpath for the Sort options.
 #' @param sort_index Integer with the index of the sorting order of the reviews:
 #'     `1` ("Most Relevant"),
 #'     `2` ("Newest"),
@@ -275,7 +275,7 @@ scroll_reviews <- function(client,
 sort_reviews <- function(client,
                          using = "xpath",
                          value_sort_btn = "//button[@data-value=\'Sort\']",
-                         value_sort_option = "//li[@role=\'menuitemradio\']",
+                         value_sort_options = "//li[@role=\'menuitemradio\']",
                          sleep = 1,
                          sort_index = 2) {
   menu_bt <- client$findElement(using, value_sort_btn)

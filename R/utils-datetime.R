@@ -45,7 +45,7 @@ duration2datetime <- function(str,
       stringr::str_remove("ago$") %>%
       stringr::str_squish()
     time_diff <- as.difftime(1, units = stringr::str_c(units, "s"))
-  } else if (stringr::str_detect("hour|day|week")) {
+  } else if (stringr::str_detect(str, "hour|day|week")) {
     units <- str %>%
       stringr::str_remove_all("ago") %>%
       stringr::str_squish() %>%
