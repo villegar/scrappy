@@ -2,7 +2,9 @@
 
 export("%>%")
 export(duration2datetime)
+export(google_maps)
 export(newa_nrcc)
 export(newa_nrcc3)
+export(wait_to_load)
 importFrom(magrittr,"%>%")
 importFrom(utils,write.csv)
