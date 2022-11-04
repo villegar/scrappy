@@ -8,7 +8,7 @@ sort_reviews(
   client,
   using = "xpath",
   value_sort_btn = "//button[@data-value='Sort']",
-  value_sort_option = "//li[@role='menuitemradio']",
+  value_sort_options = "//li[@role='menuitemradio']",
   sleep = 1,
   sort_index = 2
 )
@@ -20,7 +20,7 @@ sort_reviews(
 
 \item{value_sort_btn}{String with css tag or xpath for the Sort button.}
 
-\item{value_sort_option}{String with css tag or xpath for the Sort options.}
+\item{value_sort_options}{String with css tag or xpath for the Sort options.}
 
 \item{sleep}{Integer with number of seconds to use as pause between actions
 on the web page.}
