@@ -30,13 +30,15 @@ Convert a string with a duration (e.g. 'an hour ago') to a date-time string,
 based on a reference time
 }
 \examples{
-duration2datetime("a day ago")
+duration2datetime("a minute ago")
 duration2datetime("an hour ago")
+duration2datetime("a day ago")
 duration2datetime("a week ago")
 duration2datetime("a month ago")
 duration2datetime("a year ago")
-duration2datetime("2 days ago")
+duration2datetime("2 minutes ago")
 duration2datetime("2 hours ago")
+duration2datetime("2 days ago")
 duration2datetime("2 weeks ago")
 duration2datetime("2 months ago")
 duration2datetime("2 years ago")
