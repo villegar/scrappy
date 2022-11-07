@@ -118,7 +118,10 @@ google_maps <-
     scroll_reviews(client)
   }
   parsed_reviews %>%
-    dplyr::select(-html_el_id)
+    dplyr::select(-html_el_id) %>%
+    magrittr::set_attr("stars", overall_rating$stars) %>%
+    magrittr::set_attr("total_reviews", overall_rating$total_reviews) %>%
+    magrittr::set_class(c("gmaps_reviews", class(.)))
 }
 
 #' Handle cookies
