@@ -41,7 +41,7 @@ Tibble with the reviews extracted from Google Maps.
 Scrape Google Maps' reviews
 }
 \examples{
-#' \dontrun{
+\dontrun{
 # Create RSelenium session
 rD <- RSelenium::rsDriver(browser = "firefox", port = 4544L, verbose = FALSE)
 # Retrieve reviews for Sefton Park in Liverpool
