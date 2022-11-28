@@ -33,8 +33,10 @@ expand_reviews <-
 #' @return Tibble with the reviews extracted from Google Maps.
 #' @export
 #'
+#' @importFrom utils URLencode
+#'
 #' @examples
-#' #' \dontrun{
+#' \dontrun{
 #' # Create RSelenium session
 #' rD <- RSelenium::rsDriver(browser = "firefox", port = 4544L, verbose = FALSE)
 #' # Retrieve reviews for Sefton Park in Liverpool
@@ -61,6 +63,8 @@ google_maps <-
            sleep = 1,
            max_reviews = 100,
            with_text = FALSE) {
+  # local bindings
+  . <- html_el_id <- NULL
   # create URL by appending the name of the place to the base URL
   URL <- paste0(base, URLencode(name, reserved = TRUE))
   # check if place_id was passed to the function call, if so, append to the URL
@@ -183,6 +187,8 @@ overall_rating <- function(client) {
 #' @return Tibble with the reviews
 #' @keywords internal
 parse_reviews <- function(reviews) {
+  # local bindings
+  . <- NULL
   reviews %>%
     purrr::map_df(function(item) {
     item_html <- item$getElementAttribute("innerHTML")[[1]] %>%
