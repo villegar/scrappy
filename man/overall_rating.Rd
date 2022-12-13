@@ -4,10 +4,18 @@
 \alias{overall_rating}
 \title{Overall rating of the place}
 \usage{
-overall_rating(client)
+overall_rating(
+  client,
+  using = "xpath",
+  value = "//div[@jsaction='pane.rating.moreReviews']"
+)
 }
 \arguments{
 \item{client}{\code{RSelenium} client.}
+
+\item{using}{String with "css" or "xpath".}
+
+\item{value}{String with css tag or xpath.}
 }
 \value{
 Tibble with average number of stars and total reviews
