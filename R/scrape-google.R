@@ -284,7 +284,7 @@ scroll_reviews <- function(client,
 sort_reviews <- function(client,
                          using = "xpath",
                          value_sort_btn = "//button[@data-value=\'Sort\']",
-                         value_sort_options = "//li[@role=\'menuitemradio\']",
+                         value_sort_options = "//div[@role=\'menuitemradio\']",
                          sleep = 1,
                          sort_index = 2) {
   menu_bt <- client$findElement(using, value_sort_btn)
