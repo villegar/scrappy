@@ -22,6 +22,7 @@ Imports:
     dplyr,
     httr,
     jsonlite,
+    lubridate,
     magrittr,
     purrr,
     rvest,
