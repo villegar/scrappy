@@ -155,25 +155,65 @@ handle_cookies <- function(client,
 
 #' Overall rating of the place
 #'
+#' @inheritParams expand_reviews
 #' @inheritParams google_maps
 #'
 #' @return Tibble with average number of stars and total reviews
 #'
 #' @keywords internal
-overall_rating <- function(client) {
-  main_div <- client$findElement("css",
-                                 "div.F7nice.mmu3tf")
-  main_div_html <- main_div$getElementAttribute("innerHTML")[[1]] %>%
-    rvest::read_html()
-  stars <- main_div_html %>%
-    rvest::html_element(xpath = "/html/body/span[1]/span/span[1]") %>%
-    rvest::html_text() %>%
-    as.numeric()
-  total_reviews <- main_div_html %>%
-    rvest::html_element(xpath = "/html/body/span[2]/span[1]/button") %>%
-    rvest::html_text() %>%
-    stringr::str_remove_all("review[s]*|,") %>%
-    as.numeric()
+overall_rating <- function(
+    client,
+    using = "xpath",
+    value = "//div[@jsaction=\'pane.rating.moreReviews\']") {
+  tryCatch({
+    overall_reviews_stars <- client$findElement(using = using, value = value)
+    overall_reviews_stars_html <-
+      overall_reviews_stars$getElementAttribute("innerHTML")[[1]] %>%
+      rvest::read_html()
+  },
+  error = function(e) {
+    return(tibble::tibble(stars = NA_real_,
+                   total_reviews = NA_integer_))
+  })
+
+  tryCatch({
+    stars <- overall_reviews_stars_html %>%
+      rvest::html_element(xpath = "/html/body/span[1]/span/span[1]") %>%
+      rvest::html_text() %>%
+      as.numeric()
+  },
+  error = function(e) {
+    stars <- NA_real_
+  })
+
+  tryCatch({
+    total_reviews <- overall_reviews_stars_html %>%
+      rvest::html_element(xpath = "/html/body/span[2]/span[1]/button") %>%
+      rvest::html_text() %>%
+      stringr::str_remove_all("review[s]*|,") %>%
+      as.numeric()
+  },
+  error = function(e) {
+    total_reviews <- NA_integer_
+  })
+
+  # alternative to find the total number of reviews
+  if(is.na(total_reviews)) {
+    tryCatch({
+      more_reviews_link <-
+        client$findElements(
+          using = using,
+          value = "//button[@jsaction=\'pane.reviewChart.moreReviews\']")
+      total_reviews <-
+        more_reviews_link[[1]]$getElementAttribute("innerHTML")[[1]] %>%
+        stringr::str_remove_all("review[s]*|,") %>%
+        as.numeric()
+    },
+    error = function(e) {
+      total_reviews <- NA_integer_
+    })
+  }
+
   tibble::tibble(
     stars,
     total_reviews
