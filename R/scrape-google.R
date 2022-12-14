@@ -103,7 +103,7 @@ google_maps <-
     reviews_id <- reviews %>%
       purrr::map_chr(~.x$elementId)
     # parse reviews
-    if (nrow(parsed_reviews) > 0 ) {
+    if (nrow(parsed_reviews) > 0) {
       # parse only new reviews
       idx <- reviews_id %in% parsed_reviews$html_el_id
       new_reviews <- reviews[!idx] %>%
@@ -153,7 +153,9 @@ handle_cookies <- function(client,
       click_element(reject_all_btn)
       scrappy::wait_to_load(client = client, sleep = sleep)
     })
-  }, error = function(e) {})
+  }, error = function(e) {
+
+  })
 }
 
 #' Overall rating of the place
@@ -188,42 +190,41 @@ overall_rating <- function(
     })
 
   # Extract the total number of stars
-  tryCatch({
-    stars <- overall_reviews_stars_html %>%
+  stars <- tryCatch({
+    overall_reviews_stars_html %>%
       rvest::html_element(xpath = "/html/body/span[1]/span/span[1]") %>%
       rvest::html_text() %>%
       as.numeric()
   },
   error = function(e) {
-    stars <- NA_real_
+    NA_real_
   })
 
   # Extract the total number of reviews
-  tryCatch({
-    total_reviews <- overall_reviews_stars_html %>%
+  total_reviews <- tryCatch({
+    overall_reviews_stars_html %>%
       rvest::html_element(xpath = "/html/body/span[2]/span[1]/button") %>%
       rvest::html_text() %>%
       stringr::str_remove_all("review[s]*|,") %>%
       as.numeric()
   },
   error = function(e) {
-    total_reviews <- NA_integer_
+    NA_integer_
   })
 
   # Alternative to find the total number of reviews
-  if(is.na(total_reviews)) {
-    tryCatch({
+  if (is.na(total_reviews)) {
+    total_reviews <- tryCatch({
       more_reviews_link <- find_elements(
         client,
         using = using,
         value = "//button[@jsaction=\'pane.reviewChart.moreReviews\']")
-      total_reviews <-
-        more_reviews_link[[1]]$getElementAttribute("innerHTML")[[1]] %>%
+      more_reviews_link[[1]]$getElementAttribute("innerHTML")[[1]] %>%
         stringr::str_remove_all("review[s]*|,") %>%
         as.numeric()
     },
     error = function(e) {
-      total_reviews <- NA_integer_
+      NA_integer_
     })
   }
 

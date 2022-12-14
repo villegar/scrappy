@@ -5,13 +5,18 @@
 #' @return Returns the status of the action.
 #' @keywords internal
 click_element <- function(element) {
-  sucess <- tryCatch({
+  tryCatch({
     element$clickElement()
     TRUE
   },
-  warning = function(w) { FALSE },
-  error = function(e) { FALSE },
-  finally = { })
+  warning = function(w) {
+    FALSE
+  },
+  error = function(e) {
+    FALSE
+  },
+  finally = {
+  })
 }
 
 #' Inject a snippet of JavaScript
@@ -29,13 +34,18 @@ click_element <- function(element) {
 #' @return Returns the status of the action.
 #' @keywords internal
 execute_script <- function(client, script, args) {
-  sucess <- tryCatch({
+  tryCatch({
     client$executeScript(script, args)
     TRUE
   },
-  warning = function(w) { FALSE },
-  error = function(e) { FALSE },
-  finally = { })
+  warning = function(w) {
+    FALSE
+  },
+  error = function(e) {
+    FALSE
+  },
+  finally = {
+  })
 }
 
 #' Search for an element on the page
@@ -50,7 +60,7 @@ execute_script <- function(client, script, args) {
 #'     class.
 #' @keywords internal
 find_element <- function(client, using, value) {
-  element <- tryCatch({
+  tryCatch({
     suppressMessages({
       client$findElement(using = using, value = value)
     })
@@ -75,7 +85,7 @@ find_element <- function(client, using, value) {
 #'     `WebElement` class.
 #' @keywords internal
 find_elements <- function(client, using, value) {
-  element <- tryCatch({
+  tryCatch({
     suppressMessages({
       client$findElements(using = using, value = value)
     })
@@ -97,11 +107,16 @@ find_elements <- function(client, using, value) {
 #' @return Returns the status of the action.
 #' @keywords internal
 navigate <- function(client, url) {
-  sucess <- tryCatch({
+  tryCatch({
     client$navigate(url)
     TRUE
   },
-  warning = function(w) { FALSE },
-  error = function(e) { FALSE },
-  finally = { })
+  warning = function(w) {
+    FALSE
+  },
+  error = function(e) {
+    FALSE
+  },
+  finally = {
+  })
 }

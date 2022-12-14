@@ -48,8 +48,6 @@ newa_nrcc <- function(client,
                       table_id = "#dtable",
                       path = getwd(),
                       save_file = TRUE) {
-  # Local binding
-  . <- NULL
   # Navigate to website
   client$navigate(paste(base, interval, station, year, month, sep = "/"))
   # Wait for the website to load
@@ -102,18 +100,18 @@ newa_nrcc3 <- function(year,
                        ) {
   # Local binding
   pad_zeros <- function(val, digits = 2) {
-    if(nchar(val) == digits) return(val)
+    if (nchar(val) == digits) return(val)
     return(pad_zeros(paste0("0", val), digits))
   }
-  body <- paste0('{\n',
-                 '"sid": "', station, ' newa",\n',
-                 '"sdate": "',
+  body <- paste0("{\n",
+                 "\"sid\": \"", station, " newa\",\n",
+                 "\"sdate\": \"",
                  pad_zeros(year, 4),
                  pad_zeros(month, 2),
                  pad_zeros(day, 2),
                  pad_zeros(hour, 2),
-                 '",\n',
-                 '"edate": "now"\n}\n\n')
+                 "\",\n",
+                 "\"edate\": \"now\"\n}\n\n")
   tryCatch({
     request <- httr::POST("https://hrly.nrcc.cornell.edu/stnHrly",
                           body = body)

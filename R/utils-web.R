@@ -13,9 +13,13 @@
 #' @export
 wait_to_load <- function(client, using = "css", value = "body", sleep = 1) {
   page_element <- NULL
-  while (is.null(page_element)){
-    page_element <- tryCatch({ client$findElement(using, value) },
-                             error = function(e) { NULL })
+  while (is.null(page_element)) {
+    page_element <- tryCatch({
+      find_element(client, using, value)
+    },
+    error = function(e) {
+      NULL
+    })
     Sys.sleep(sample(seq(0, sleep, by = 0.1), 1)) # wait a random number of sec.
   }
 }
