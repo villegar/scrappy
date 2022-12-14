@@ -82,6 +82,10 @@ google_maps <-
 
   # get overall rating for the place
   overall_rating <- overall_rating(client)
+  if (is.na(getElement(overall_rating, "total_reviews"))) {
+    message("Warning: Failed to determine the total number reviews.")
+    return(tibble::tibble())
+  }
 
   # sort reviews by most recent
   sort_reviews(client, sleep = sleep)
@@ -90,7 +94,8 @@ google_maps <-
   n_reviews <- 0
   parsed_reviews <- tibble::tibble()
   while (n_reviews < min(max_reviews,
-                                    overall_rating$total_reviews)) {
+                         overall_rating$total_reviews,
+                         na.rm = TRUE)) {
     expand_reviews(client) # expand long reviews
     # retrieve all the reviews
     reviews <- client$findElements("css",
@@ -165,6 +170,11 @@ overall_rating <- function(
     client,
     using = "xpath",
     value = "//div[@jsaction=\'pane.rating.moreReviews\']") {
+  # Initialise outputs
+  stars <- NA_real_
+  total_reviews <- NA_integer_
+
+  # Extract HTML element with reviews' overview
   tryCatch({
     overall_reviews_stars <- client$findElement(using = using, value = value)
     overall_reviews_stars_html <-
@@ -173,9 +183,10 @@ overall_rating <- function(
   },
   error = function(e) {
     return(tibble::tibble(stars = NA_real_,
-                   total_reviews = NA_integer_))
+                          total_reviews = NA_integer_))
   })
 
+  # Extract the total number of stars
   tryCatch({
     stars <- overall_reviews_stars_html %>%
       rvest::html_element(xpath = "/html/body/span[1]/span/span[1]") %>%
@@ -186,6 +197,7 @@ overall_rating <- function(
     stars <- NA_real_
   })
 
+  # Extract the total number of reviews
   tryCatch({
     total_reviews <- overall_reviews_stars_html %>%
       rvest::html_element(xpath = "/html/body/span[2]/span[1]/button") %>%
@@ -197,7 +209,7 @@ overall_rating <- function(
     total_reviews <- NA_integer_
   })
 
-  # alternative to find the total number of reviews
+  # Alternative to find the total number of reviews
   if(is.na(total_reviews)) {
     tryCatch({
       more_reviews_link <-
