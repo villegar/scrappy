@@ -11,8 +11,8 @@ expand_reviews <-
   function(client,
            using = "xpath",
            value = "//button[@jsaction='pane.review.expandReview']") {
-  client$findElements(using, value) %>%
-    purrr::walk(~.x$clickElement())
+  find_elements(client, using, value) %>%
+    purrr::walk(click_element)
 }
 
 #' Scrape Google Maps' reviews
@@ -72,7 +72,7 @@ google_maps <-
     URL <- paste0(URL, "&query_place_id=", URLencode(place_id, reserved = TRUE))
 
   # navigate to the target web page
-  client$navigate(URL)
+  navigate(client, URL)
 
   # wait for the page to load
   scrappy::wait_to_load(client = client, sleep = sleep)
@@ -98,8 +98,7 @@ google_maps <-
                          na.rm = TRUE)) {
     expand_reviews(client) # expand long reviews
     # retrieve all the reviews
-    reviews <- client$findElements("css",
-                                   "div.jftiEf.fontBodyMedium")
+    reviews <- find_elements(client, "css", "div.jftiEf.fontBodyMedium")
     # extract the unique identifier for the reviews HTML elements
     reviews_id <- reviews %>%
       purrr::map_chr(~.x$elementId)
@@ -150,9 +149,8 @@ handle_cookies <- function(client,
                            sleep = 1) {
   tryCatch({
     suppressMessages({
-      reject_all_btn <-
-        client$findElement(using, value)
-      reject_all_btn$clickElement()
+      reject_all_btn <- find_element(client, using, value)
+      click_element(reject_all_btn)
       scrappy::wait_to_load(client = client, sleep = sleep)
     })
   }, error = function(e) {})
@@ -174,17 +172,20 @@ overall_rating <- function(
   stars <- NA_real_
   total_reviews <- NA_integer_
 
-  # Extract HTML element with reviews' overview
-  tryCatch({
-    overall_reviews_stars <- client$findElement(using = using, value = value)
-    overall_reviews_stars_html <-
-      overall_reviews_stars$getElementAttribute("innerHTML")[[1]] %>%
-      rvest::read_html()
-  },
-  error = function(e) {
+  # Extract HTML element with the reviews overview
+  overall_reviews_stars <- find_element(client, using = using, value = value)
+  if (is.null(overall_reviews_stars)) {
     return(tibble::tibble(stars = NA_real_,
                           total_reviews = NA_integer_))
-  })
+  }
+  overall_reviews_stars_html <-
+    tryCatch({
+      overall_reviews_stars$getElementAttribute("innerHTML")[[1]] %>%
+        rvest::read_html()
+    },
+    error = function(e) {
+      NA
+    })
 
   # Extract the total number of stars
   tryCatch({
@@ -212,10 +213,10 @@ overall_rating <- function(
   # Alternative to find the total number of reviews
   if(is.na(total_reviews)) {
     tryCatch({
-      more_reviews_link <-
-        client$findElements(
-          using = using,
-          value = "//button[@jsaction=\'pane.reviewChart.moreReviews\']")
+      more_reviews_link <- find_elements(
+        client,
+        using = using,
+        value = "//button[@jsaction=\'pane.reviewChart.moreReviews\']")
       total_reviews <-
         more_reviews_link[[1]]$getElementAttribute("innerHTML")[[1]] %>%
         stringr::str_remove_all("review[s]*|,") %>%
@@ -244,7 +245,6 @@ parse_reviews <- function(reviews) {
   reviews %>%
     purrr::map_df(function(item) {
     item_html <- item$getElementAttribute("innerHTML")[[1]] %>%
-      # item$getElementAttribute("outerHTML")[[1]] %>%
       xml2::read_html()
     review_id <- item_html %>%
       rvest::html_element(xpath = "//div") %>%
@@ -314,9 +314,10 @@ scroll_reviews <- function(client,
                            value = "div.m6QErb.DxyBCb.kA9KIf.dS8AEf",
                            scroll_px = 1000,
                            sleep = 1) {
-  scrollable_div <- client$findElement(using, value)
-  client$executeScript(paste0("arguments[0].scrollBy(0,", scroll_px, ");"),
-                       args = list(scrollable_div))
+  scrollable_div <- find_element(client, using, value)
+  execute_script(client,
+                 script = paste0("arguments[0].scrollBy(0,", scroll_px, ");"),
+                 args = list(scrollable_div))
   Sys.sleep(sleep)
 }
 
@@ -339,10 +340,10 @@ sort_reviews <- function(client,
                          value_sort_options = "//div[@role=\'menuitemradio\']",
                          sleep = 1,
                          sort_index = 2) {
-  menu_bt <- client$findElement(using, value_sort_btn)
-  menu_bt$clickElement()
+  menu_bt <- find_element(client, using, value_sort_btn)
+  click_element(menu_bt)
   Sys.sleep(sleep)
-  sort_options <- client$findElements(using, value_sort_options)
-  sort_options[[sort_index]]$clickElement()
+  sort_options <- find_elements(client, using, value_sort_options)
+  click_element(sort_options[[sort_index]])
   Sys.sleep(sleep)
 }
