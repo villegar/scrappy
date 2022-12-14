@@ -21,15 +21,15 @@ click_element <- function(element) {
 
 #' Inject a snippet of JavaScript
 #'
-#' Inject a snippet of JavaScript into the page for exe- cution in the context
+#' Inject a snippet of JavaScript into the page for execution in the context
 #' of the currently selected frame. The executed script is assumed to be
 #' synchronous and the result of evaluating the script is returned to the
-#' client. The script argu- ment defines the script to execute in the form of a
+#' client. The script argument defines the script to execute in the form of a
 #' function body.
 #'
 #' @param client \code{RSelenium} client.
 #' @param script String with the JavaScript to be executed.
-#' @param args List of srguments for the `script`.
+#' @param args List of arguments for the `script`.
 #'
 #' @return Returns the status of the action.
 #' @keywords internal
