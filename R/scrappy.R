@@ -66,8 +66,9 @@ newa_nrcc <- function(client,
   out <- as.data.frame(out)
   out$station <- station
   colnames(out) <- original_names
-  if (save_file)
+  if (save_file) {
     write.csv(out, file, row.names = FALSE)
+  }
   invisible(out)
 }
 
@@ -96,52 +97,62 @@ newa_nrcc3 <- function(year,
                        day,
                        hour,
                        station,
-                       base = "https://hrly.nrcc.cornell.edu/stnHrly"
-                       ) {
+                       base = "https://hrly.nrcc.cornell.edu/stnHrly") {
   # Local binding
   pad_zeros <- function(val, digits = 2) {
-    if (nchar(val) == digits) return(val)
+    if (nchar(val) == digits) {
+      return(val)
+    }
     return(pad_zeros(paste0("0", val), digits))
   }
-  body <- paste0("{\n",
-                 "\"sid\": \"", station, " newa\",\n",
-                 "\"sdate\": \"",
-                 pad_zeros(year, 4),
-                 pad_zeros(month, 2),
-                 pad_zeros(day, 2),
-                 pad_zeros(hour, 2),
-                 "\",\n",
-                 "\"edate\": \"now\"\n}\n\n")
-  tryCatch({
-    request <- httr::POST("https://hrly.nrcc.cornell.edu/stnHrly",
-                          body = body)
-    contents <- httr::content(request)
-    if (typeof(contents) == "character" &&
-        grepl("Invalid Request|sid", contents))
-      stop("'", station, "' is not a valid station code", call. = FALSE)
-    contents <- contents %>%
-      jsonlite::fromJSON()
-    # Extract hourly data
-    hrlyData <- contents$hrlyData %>%
-      magrittr::set_colnames(contents$hrlyFields) %>%
-      tibble::as_tibble()
-    # Extract daily data
-    dlyData <- contents$dlyData %>%
-      magrittr::set_colnames(contents$dlyFields) %>%
-      tibble::as_tibble()
-    # Extract hourly forecast data
-    fcstData <- contents$fcstData %>%
-      magrittr::set_colnames(contents$fcstFields) %>%
-      tibble::as_tibble()
-    # Extract daily forecast data
-    dlyFcstData <- contents$dlyFcstData %>%
-      magrittr::set_colnames(contents$dlyFcstFields) %>%
-      tibble::as_tibble()
-    return(list(hourly = hrlyData,
-                daily = dlyData,
-                hourly_forecast = fcstData,
-                daily_forecast = dlyFcstData))
-  }, error = function(e) {
-    warning(e)
-  })
+  body <- paste0(
+    "{\n",
+    "\"sid\": \"", station, " newa\",\n",
+    "\"sdate\": \"",
+    pad_zeros(year, 4),
+    pad_zeros(month, 2),
+    pad_zeros(day, 2),
+    pad_zeros(hour, 2),
+    "\",\n",
+    "\"edate\": \"now\"\n}\n\n"
+  )
+  tryCatch(
+    {
+      request <- httr::POST("https://hrly.nrcc.cornell.edu/stnHrly",
+        body = body
+      )
+      contents <- httr::content(request)
+      if (typeof(contents) == "character" &&
+        grepl("Invalid Request|sid", contents)) {
+        stop("'", station, "' is not a valid station code", call. = FALSE)
+      }
+      contents <- contents %>%
+        jsonlite::fromJSON()
+      # Extract hourly data
+      hrlyData <- contents$hrlyData %>%
+        magrittr::set_colnames(contents$hrlyFields) %>%
+        tibble::as_tibble()
+      # Extract daily data
+      dlyData <- contents$dlyData %>%
+        magrittr::set_colnames(contents$dlyFields) %>%
+        tibble::as_tibble()
+      # Extract hourly forecast data
+      fcstData <- contents$fcstData %>%
+        magrittr::set_colnames(contents$fcstFields) %>%
+        tibble::as_tibble()
+      # Extract daily forecast data
+      dlyFcstData <- contents$dlyFcstData %>%
+        magrittr::set_colnames(contents$dlyFcstFields) %>%
+        tibble::as_tibble()
+      return(list(
+        hourly = hrlyData,
+        daily = dlyData,
+        hourly_forecast = fcstData,
+        daily_forecast = dlyFcstData
+      ))
+    },
+    error = function(e) {
+      warning(e)
+    }
+  )
 }

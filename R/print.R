@@ -20,13 +20,15 @@ print.gmaps_reviews <- function(x, ...) {
   if (is.na(total_reviews) || total_reviews == 0) {
     message("This place (", name, ") has no reviews.")
   } else {
-    message("This place (",
-            name,
-            ") has an overall rating of ",
-            stars,
-            " stars and ",
-            total_reviews,
-            " total reviews.")
+    message(
+      "This place (",
+      name,
+      ") has an overall rating of ",
+      stars,
+      " stars and ",
+      total_reviews,
+      " total reviews."
+    )
   }
   NextMethod()
 }
