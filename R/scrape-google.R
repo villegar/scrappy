@@ -84,7 +84,14 @@ google_maps <-
   overall_rating <- overall_rating(client)
   if (is.na(getElement(overall_rating, "total_reviews"))) {
     message("Warning: Failed to determine the total number reviews.")
-    return(tibble::tibble())
+    zero_reviews <- tibble::tibble() %>%
+      magrittr::set_attr("name", name) %>%
+      magrittr::set_attr("place_id",
+                         ifelse(is.null(place_id), NA, place_id)) %>%
+      magrittr::set_attr("stars", overall_rating$stars) %>%
+      magrittr::set_attr("total_reviews", overall_rating$total_reviews) %>%
+      magrittr::set_class(c("gmaps_reviews", class(.)))
+    return(zero_reviews)
   }
 
   # sort reviews by most recent
@@ -127,6 +134,8 @@ google_maps <-
   }
   parsed_reviews %>%
     dplyr::select(-html_el_id) %>%
+    magrittr::set_attr("name", name) %>%
+    magrittr::set_attr("place_id", ifelse(missing(place_id), NA, place_id)) %>%
     magrittr::set_attr("stars", overall_rating$stars) %>%
     magrittr::set_attr("total_reviews", overall_rating$total_reviews) %>%
     magrittr::set_class(c("gmaps_reviews", class(.)))
