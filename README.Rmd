@@ -49,15 +49,19 @@ you can replace the value of `browser` in the call to `RSelenium::rsDriver`.
 rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
 
 # Call scrappy
-out_newa <- scrappy::newa_nrcc(client = rD$client, 
-                               year = 2020, 
-                               month = 12, # December
-                               station = "gbe", # Geneva (Bejo) station
-                               save_file = FALSE) # Don't save output
+out_newa <- scrappy::newa_nrcc(
+  client = rD$client,
+  year = 2020,
+  month = 12, # December
+  station = "gbe", # Geneva (Bejo) station
+  save_file = FALSE
+) # Don't save output
 
-out_gmaps <- scrappy::google_maps(client = rD$client,
-                                  name = "Sefton Park",
-                                  max_reviews = 20)
+out_gmaps <- scrappy::google_maps(
+  client = rD$client,
+  name = "Sefton Park",
+  max_reviews = 20
+)
 # Stop server
 conn <- rD$server$stop()
 ```
@@ -71,11 +75,13 @@ Website: http://newa.cornell.edu
 rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
 
 # Call scrappy
-out <- scrappy::newa_nrcc(client = rD$client, 
-                          year = 2020, 
-                          month = 12, # December
-                          station = "gbe", # Geneva (Bejo) station
-                          save_file = FALSE) # Don't save output to a CSV file
+out <- scrappy::newa_nrcc(
+  client = rD$client,
+  year = 2020,
+  month = 12, # December
+  station = "gbe", # Geneva (Bejo) station
+  save_file = FALSE
+) # Don't save output to a CSV file
 # Stop server
 rD$server$stop()
 ```
@@ -93,9 +99,11 @@ Extract the reviews for Sefton Park in Liverpool (only the 20 most recent):
 rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
 
 # Call scrappy
-out <- scrappy::google_maps(client = rD$client,
-                            name = "Sefton Park",
-                            max_reviews = 20)
+out <- scrappy::google_maps(
+  client = rD$client,
+  name = "Sefton Park",
+  max_reviews = 20
+)
 # Stop server
 rD$server$stop()
 ```
@@ -104,7 +112,9 @@ Output after removing original authors' names and URL to their profiles:
 ```{r, echo = FALSE}
 `%>%` <- scrappy::`%>%`
 out_gmaps %>%
-  dplyr::mutate(author = paste0("Author ", seq_along(author)),
-                author_url = "") %>%
-knitr::kable()
+  dplyr::mutate(
+    author = paste0("Author ", seq_along(author)),
+    author_url = ""
+  ) %>%
+  knitr::kable()
 ```
