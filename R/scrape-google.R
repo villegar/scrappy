@@ -7,10 +7,9 @@
 #' @inheritParams google_maps
 #'
 #' @keywords internal
-expand_reviews <-
-  function(client,
-           using = "xpath",
-           value = "//button[@jsaction='pane.review.expandReview']") {
+expand_reviews <- function(client,
+                           using = "xpath",
+                           value = "//button[@jsaction='pane.review.expandReview']") {
   find_elements(client, using, value) %>%
     purrr::walk(click_element)
 }
@@ -41,35 +40,39 @@ expand_reviews <-
 #' rD <- RSelenium::rsDriver(browser = "firefox", port = 4544L, verbose = FALSE)
 #' # Retrieve reviews for Sefton Park in Liverpool
 #' sefton_park_reviews_tb <-
-#'   scrappy::google_maps(client = rD$client,
-#'                        name = "Sefton Park",
-#'                        place_id = "ChIJrTCHJVkge0gRm1LWF0fSPgw",
-#'                        max_reviews = 20)
+#'   scrappy::google_maps(
+#'     client = rD$client,
+#'     name = "Sefton Park",
+#'     place_id = "ChIJrTCHJVkge0gRm1LWF0fSPgw",
+#'     max_reviews = 20
+#'   )
 #'
 #' sefton_park_reviews_tb_with_text <-
-#'   scrappy::google_maps(client = rD$client,
-#'                        name = "Sefton Park",
-#'                        place_id = "ChIJrTCHJVkge0gRm1LWF0fSPgw",
-#'                        max_reviews = 20,
-#'                        with_text = TRUE)
+#'   scrappy::google_maps(
+#'     client = rD$client,
+#'     name = "Sefton Park",
+#'     place_id = "ChIJrTCHJVkge0gRm1LWF0fSPgw",
+#'     max_reviews = 20,
+#'     with_text = TRUE
+#'   )
 #' # Stop server
 #' rD$server$stop()
 #' }
-google_maps <-
-  function(client,
-           name,
-           place_id = NULL,
-           base = "https://www.google.com/maps/search/?api=1&query=",
-           sleep = 1,
-           max_reviews = 100,
-           with_text = FALSE) {
+google_maps <- function(client,
+                        name,
+                        place_id = NULL,
+                        base = "https://www.google.com/maps/search/?api=1&query=",
+                        sleep = 1,
+                        max_reviews = 100,
+                        with_text = FALSE) {
   # local bindings
   . <- html_el_id <- NULL
   # create URL by appending the name of the place to the base URL
   URL <- paste0(base, URLencode(name, reserved = TRUE))
   # check if place_id was passed to the function call, if so, append to the URL
-  if (!missing(place_id))
+  if (!missing(place_id)) {
     URL <- paste0(URL, "&query_place_id=", URLencode(place_id, reserved = TRUE))
+  }
 
   # navigate to the target web page
   navigate(client, URL)
@@ -86,8 +89,10 @@ google_maps <-
     message("Warning: Failed to determine the total number reviews.")
     zero_reviews <- tibble::tibble() %>%
       magrittr::set_attr("name", name) %>%
-      magrittr::set_attr("place_id",
-                         ifelse(is.null(place_id), NA, place_id)) %>%
+      magrittr::set_attr(
+        "place_id",
+        ifelse(is.null(place_id), NA, place_id)
+      ) %>%
       magrittr::set_attr("stars", overall_rating$stars) %>%
       magrittr::set_attr("total_reviews", overall_rating$total_reviews) %>%
       magrittr::set_class(c("gmaps_reviews", class(.)))
@@ -101,14 +106,15 @@ google_maps <-
   n_reviews <- 0
   parsed_reviews <- tibble::tibble()
   while (n_reviews < min(max_reviews,
-                         overall_rating$total_reviews,
-                         na.rm = TRUE)) {
+    overall_rating$total_reviews,
+    na.rm = TRUE
+  )) {
     expand_reviews(client) # expand long reviews
     # retrieve all the reviews
     reviews <- find_elements(client, "css", "div.jftiEf.fontBodyMedium")
     # extract the unique identifier for the reviews HTML elements
     reviews_id <- reviews %>%
-      purrr::map_chr(~.x$elementId)
+      purrr::map_chr(~ .x$elementId)
     # parse reviews
     if (nrow(parsed_reviews) > 0) {
       # parse only new reviews
@@ -156,15 +162,18 @@ handle_cookies <- function(client,
                            value = "//button[@aria-label=\'Reject all\']",
                            accept_cookies = FALSE,
                            sleep = 1) {
-  tryCatch({
-    suppressMessages({
-      reject_all_btn <- find_element(client, using, value)
-      click_element(reject_all_btn)
-      scrappy::wait_to_load(client = client, sleep = sleep)
-    })
-  }, error = function(e) {
+  tryCatch(
+    {
+      suppressMessages({
+        reject_all_btn <- find_element(client, using, value)
+        click_element(reject_all_btn)
+        scrappy::wait_to_load(client = client, sleep = sleep)
+      })
+    },
+    error = function(e) {
 
-  })
+    }
+  )
 }
 
 #' Overall rating of the place
@@ -175,10 +184,9 @@ handle_cookies <- function(client,
 #' @return Tibble with average number of stars and total reviews
 #'
 #' @keywords internal
-overall_rating <- function(
-    client,
-    using = "xpath",
-    value = "//div[@jsaction=\'pane.rating.moreReviews\']") {
+overall_rating <- function(client,
+                           using = "xpath",
+                           value = "//div[@jsaction=\'pane.rating.moreReviews\']") {
   # Initialise outputs
   stars <- NA_real_
   total_reviews <- NA_integer_
@@ -186,55 +194,66 @@ overall_rating <- function(
   # Extract HTML element with the reviews overview
   overall_reviews_stars <- find_element(client, using = using, value = value)
   if (is.null(overall_reviews_stars)) {
-    return(tibble::tibble(stars = NA_real_,
-                          total_reviews = NA_integer_))
+    return(tibble::tibble(
+      stars = NA_real_,
+      total_reviews = NA_integer_
+    ))
   }
   overall_reviews_stars_html <-
-    tryCatch({
-      overall_reviews_stars$getElementAttribute("innerHTML")[[1]] %>%
-        rvest::read_html()
-    },
-    error = function(e) {
-      NA
-    })
+    tryCatch(
+      {
+        overall_reviews_stars$getElementAttribute("innerHTML")[[1]] %>%
+          rvest::read_html()
+      },
+      error = function(e) {
+        NA
+      }
+    )
 
   # Extract the total number of stars
-  stars <- tryCatch({
-    overall_reviews_stars_html %>%
-      rvest::html_element(xpath = "/html/body/span[1]/span/span[1]") %>%
-      rvest::html_text() %>%
-      as.numeric()
-  },
-  error = function(e) {
-    NA_real_
-  })
+  stars <- tryCatch(
+    {
+      overall_reviews_stars_html %>%
+        rvest::html_element(xpath = "/html/body/span[1]/span/span[1]") %>%
+        rvest::html_text() %>%
+        as.numeric()
+    },
+    error = function(e) {
+      NA_real_
+    }
+  )
 
   # Extract the total number of reviews
-  total_reviews <- tryCatch({
-    overall_reviews_stars_html %>%
-      rvest::html_element(xpath = "/html/body/span[2]/span[1]/button") %>%
-      rvest::html_text() %>%
-      stringr::str_remove_all("review[s]*|,") %>%
-      as.numeric()
-  },
-  error = function(e) {
-    NA_integer_
-  })
-
-  # Alternative to find the total number of reviews
-  if (is.na(total_reviews)) {
-    total_reviews <- tryCatch({
-      more_reviews_link <- find_elements(
-        client,
-        using = using,
-        value = "//button[@jsaction=\'pane.reviewChart.moreReviews\']")
-      more_reviews_link[[1]]$getElementAttribute("innerHTML")[[1]] %>%
+  total_reviews <- tryCatch(
+    {
+      overall_reviews_stars_html %>%
+        rvest::html_element(xpath = "/html/body/span[2]/span[1]/button") %>%
+        rvest::html_text() %>%
         stringr::str_remove_all("review[s]*|,") %>%
         as.numeric()
     },
     error = function(e) {
       NA_integer_
-    })
+    }
+  )
+
+  # Alternative to find the total number of reviews
+  if (is.na(total_reviews)) {
+    total_reviews <- tryCatch(
+      {
+        more_reviews_link <- find_elements(
+          client,
+          using = using,
+          value = "//button[@jsaction=\'pane.reviewChart.moreReviews\']"
+        )
+        more_reviews_link[[1]]$getElementAttribute("innerHTML")[[1]] %>%
+          stringr::str_remove_all("review[s]*|,") %>%
+          as.numeric()
+      },
+      error = function(e) {
+        NA_integer_
+      }
+    )
   }
 
   tibble::tibble(
@@ -254,60 +273,60 @@ parse_reviews <- function(reviews) {
   . <- NULL
   reviews %>%
     purrr::map_df(function(item) {
-    item_html <- item$getElementAttribute("innerHTML")[[1]] %>%
-      xml2::read_html()
-    review_id <- item_html %>%
-      rvest::html_element(xpath = "//div") %>%
-      rvest::html_attr("data-review-id")
-    review_locality <- item_html %>%
-      rvest::html_element(xpath = "/html/body/div/div[3]/div[2]/div[2]/div[1]/a/div[2]/span[1]") %>%
-      rvest::html_text() %>%
-      stringr::str_squish()
-    review_total_reviews <- item_html %>%
-      rvest::html_element(xpath = "/html/body/div/div[3]/div[2]/div[2]/div[1]/a/div[2]/span[2]") %>%
-      rvest::html_text() %>%
-      stringr::str_extract("[0-9]+") %>%
-      as.integer()
-    review_author <- item_html %>%
-      rvest::html_element(".d4r55") %>%
-      rvest::html_text() %>%
-      stringr::str_squish()
-    review_author_url <- item_html %>%
-      rvest::html_element(xpath = "/html/body/div/div[3]/div[2]/div[2]/div[1]/a") %>%
-      rvest::html_attr("href") %>%
-      stringr::str_squish()
-    review_comment <- item_html %>%
-      # rvest::html_element(".MyEned") %>%
-      rvest::html_element(".wiI7pd") %>%
-      rvest::html_text() %>%
-      stringr::str_squish()
-    review_rating <- item_html %>%
-      rvest::html_element(".kvMYJc") %>%
-      rvest::html_attr("aria-label") %>%
-      stringr::str_remove_all("star[s]*") %>%
-      stringr::str_squish() %>%
-      as.integer()
-    review_date_relative <- item_html %>%
-      rvest::html_element(".rsqaWe") %>%
-      rvest::html_text() %>%
-      stringr::str_squish()
-    review_date_downloaded <- Sys.time()
-    review_date_absolute <- review_date_relative %>%
-      scrappy::duration2datetime(ref_time = review_date_downloaded)
-    tibble::tibble(
-      review_id,
-      review_author,
-      review_author_url,
-      review_comment,
-      review_rating,
-      review_locality,
-      review_total_reviews,
-      review_date_relative,
-      review_date_absolute,
-      review_date_downloaded
-    ) %>%
-      magrittr::set_names(names(.) %>% stringr::str_remove_all("review_"))
-  })
+      item_html <- item$getElementAttribute("innerHTML")[[1]] %>%
+        xml2::read_html()
+      review_id <- item_html %>%
+        rvest::html_element(xpath = "//div") %>%
+        rvest::html_attr("data-review-id")
+      review_locality <- item_html %>%
+        rvest::html_element(xpath = "/html/body/div/div[3]/div[2]/div[2]/div[1]/a/div[2]/span[1]") %>%
+        rvest::html_text() %>%
+        stringr::str_squish()
+      review_total_reviews <- item_html %>%
+        rvest::html_element(xpath = "/html/body/div/div[3]/div[2]/div[2]/div[1]/a/div[2]/span[2]") %>%
+        rvest::html_text() %>%
+        stringr::str_extract("[0-9]+") %>%
+        as.integer()
+      review_author <- item_html %>%
+        rvest::html_element(".d4r55") %>%
+        rvest::html_text() %>%
+        stringr::str_squish()
+      review_author_url <- item_html %>%
+        rvest::html_element(xpath = "/html/body/div/div[3]/div[2]/div[2]/div[1]/a") %>%
+        rvest::html_attr("href") %>%
+        stringr::str_squish()
+      review_comment <- item_html %>%
+        # rvest::html_element(".MyEned") %>%
+        rvest::html_element(".wiI7pd") %>%
+        rvest::html_text() %>%
+        stringr::str_squish()
+      review_rating <- item_html %>%
+        rvest::html_element(".kvMYJc") %>%
+        rvest::html_attr("aria-label") %>%
+        stringr::str_remove_all("star[s]*") %>%
+        stringr::str_squish() %>%
+        as.integer()
+      review_date_relative <- item_html %>%
+        rvest::html_element(".rsqaWe") %>%
+        rvest::html_text() %>%
+        stringr::str_squish()
+      review_date_downloaded <- Sys.time()
+      review_date_absolute <- review_date_relative %>%
+        scrappy::duration2datetime(ref_time = review_date_downloaded)
+      tibble::tibble(
+        review_id,
+        review_author,
+        review_author_url,
+        review_comment,
+        review_rating,
+        review_locality,
+        review_total_reviews,
+        review_date_relative,
+        review_date_absolute,
+        review_date_downloaded
+      ) %>%
+        magrittr::set_names(names(.) %>% stringr::str_remove_all("review_"))
+    })
 }
 
 #' Scroll reviews
@@ -326,8 +345,9 @@ scroll_reviews <- function(client,
                            sleep = 1) {
   scrollable_div <- find_element(client, using, value)
   execute_script(client,
-                 script = paste0("arguments[0].scrollBy(0,", scroll_px, ");"),
-                 args = list(scrollable_div))
+    script = paste0("arguments[0].scrollBy(0,", scroll_px, ");"),
+    args = list(scrollable_div)
+  )
   Sys.sleep(sleep)
 }
 
