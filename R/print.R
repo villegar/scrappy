@@ -13,7 +13,6 @@ NULL
 #' @export
 print.gmaps_reviews <- function(x, ...) {
   name <- attr(x, "name")
-  place_id <- attr(x, "place_id")
   stars <- attr(x, "stars")
   total_reviews <- attr(x, "total_reviews")
 
