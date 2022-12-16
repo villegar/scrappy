@@ -46,17 +46,21 @@ Scrape Google Maps' reviews
 rD <- RSelenium::rsDriver(browser = "firefox", port = 4544L, verbose = FALSE)
 # Retrieve reviews for Sefton Park in Liverpool
 sefton_park_reviews_tb <-
-  scrappy::google_maps(client = rD$client,
-                       name = "Sefton Park",
-                       place_id = "ChIJrTCHJVkge0gRm1LWF0fSPgw",
-                       max_reviews = 20)
+  scrappy::google_maps(
+    client = rD$client,
+    name = "Sefton Park",
+    place_id = "ChIJrTCHJVkge0gRm1LWF0fSPgw",
+    max_reviews = 20
+  )
 
 sefton_park_reviews_tb_with_text <-
-  scrappy::google_maps(client = rD$client,
-                       name = "Sefton Park",
-                       place_id = "ChIJrTCHJVkge0gRm1LWF0fSPgw",
-                       max_reviews = 20,
-                       with_text = TRUE)
+  scrappy::google_maps(
+    client = rD$client,
+    name = "Sefton Park",
+    place_id = "ChIJrTCHJVkge0gRm1LWF0fSPgw",
+    max_reviews = 20,
+    with_text = TRUE
+  )
 # Stop server
 rD$server$stop()
 }

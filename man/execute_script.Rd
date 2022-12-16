@@ -11,16 +11,16 @@ execute_script(client, script, args)
 
 \item{script}{String with the JavaScript to be executed.}
 
-\item{args}{List of srguments for the \code{script}.}
+\item{args}{List of arguments for the \code{script}.}
 }
 \value{
 Returns the status of the action.
 }
 \description{
-Inject a snippet of JavaScript into the page for exe- cution in the context
+Inject a snippet of JavaScript into the page for execution in the context
 of the currently selected frame. The executed script is assumed to be
 synchronous and the result of evaluating the script is returned to the
-client. The script argu- ment defines the script to execute in the form of a
+client. The script argument defines the script to execute in the form of a
 function body.
 }
 \keyword{internal}

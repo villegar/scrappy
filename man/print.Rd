@@ -5,9 +5,7 @@
 \alias{print.gmaps_reviews}
 \title{Print Values}
 \usage{
-print(x, ...)
-
-print.gmaps_reviews(x, ...)
+\method{print}{gmaps_reviews}(x, ...)
 }
 \arguments{
 \item{x}{an object used to select a method.}
@@ -16,4 +14,6 @@ print.gmaps_reviews(x, ...)
 }
 \description{
 Print Values
+
+Print Google Maps' reviews
 }
