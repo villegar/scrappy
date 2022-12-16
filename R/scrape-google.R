@@ -141,7 +141,7 @@ google_maps <- function(client,
   parsed_reviews %>%
     dplyr::select(-html_el_id) %>%
     magrittr::set_attr("name", name) %>%
-    magrittr::set_attr("place_id", ifelse(missing(place_id), NA, place_id)) %>%
+    magrittr::set_attr("place_id", ifelse(is.null(place_id), NA, place_id)) %>%
     magrittr::set_attr("stars", overall_rating$stars) %>%
     magrittr::set_attr("total_reviews", overall_rating$total_reviews) %>%
     magrittr::set_class(c("gmaps_reviews", class(.)))
