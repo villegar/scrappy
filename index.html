@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,18 +34,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">scrappy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -53,7 +49,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/villegar/scrappy/">
+  <a href="https://github.com/villegar/scrappy/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -70,57 +66,57 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="scrappy-a-simple-web-scraper-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#scrappy-a-simple-web-scraper-" class="anchor"></a>scrappy: A Simple Web Scraper <img src="https://raw.githubusercontent.com/villegar/scrappy/main/inst/images/logo.png" alt="logo" align="right" height="200px/">
+<div class="section level1">
+<div class="page-header"><h1 id="scrappy-a-simple-web-scraper-">scrappy: A Simple Web Scraper <img src="https://raw.githubusercontent.com/villegar/scrappy/main/inst/images/logo.png" alt="logo" align="right" height="200px/"><a class="anchor" aria-label="anchor" href="#scrappy-a-simple-web-scraper-"></a>
 </h1></div>
 <!-- badges: start -->
-
 <p>The goal of scrappy is to provide simple functions to scrape data from different websites for academic purposes.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of scrappy from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the released version of scrappy from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"scrappy"</span><span class="op">)</span></code></pre></div>
-<p>And the development version from <a href="https://github.com/villegar/scrappy">GitHub</a> with:</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"scrappy"</span><span class="op">)</span></span></code></pre></div>
+<p>And the development version from <a href="https://github.com/villegar/scrappy" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"villegar/scrappy"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"villegar/scrappy"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<div id="newa--cornell-university" class="section level3">
-<h3 class="hasAnchor">
-<a href="#newa--cornell-university" class="anchor"></a>NEWA @ Cornell University</h3>
-<p>The Network for Environment and Weather Applications at Cornell University. Website: <a href="http://newa.cornell.edu" class="uri">http://newa.cornell.edu</a></p>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
+<p><strong>NOTE:</strong> To run the following examples on your computer, you need to download and install Mozilla Firefox (<a href="https://www.mozilla.org/en-GB/firefox/new/" class="external-link uri">https://www.mozilla.org/en-GB/firefox/new/</a>). Alternatively, you can replace the value of <code>browser</code> in the call to <code>RSelenium::rsDriver</code>.</p>
+<div class="section level3">
+<h3 id="newa--cornell-university">NEWA @ Cornell University<a class="anchor" aria-label="anchor" href="#newa--cornell-university"></a>
+</h3>
+<p>The Network for Environment and Weather Applications at Cornell University. Website: <a href="http://newa.cornell.edu" class="external-link uri">http://newa.cornell.edu</a></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Create RSelenium session</span>
-<span class="va">rD</span> <span class="op">&lt;-</span> <span class="fu">RSelenium</span><span class="fu">::</span><span class="fu">rsDriver</span><span class="op">(</span>browser <span class="op">=</span> <span class="st">"firefox"</span>, port <span class="op">=</span> <span class="fl">4548L</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="co"># Call scrappy</span>
-<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">scrappy</span><span class="fu">::</span><span class="fu"><a href="reference/newa_nrcc.html">newa_nrcc</a></span><span class="op">(</span>client <span class="op">=</span> <span class="va">rD</span><span class="op">$</span><span class="va">client</span>, 
-                          year <span class="op">=</span> <span class="fl">2020</span>, 
-                          month <span class="op">=</span> <span class="fl">12</span>, <span class="co"># December</span>
-                          station <span class="op">=</span> <span class="st">"gbe"</span>, <span class="co"># Geneva (Bejo) station</span>
-                          save_file <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># Don't save output to a CSV file</span>
-<span class="co"># Stop server</span>
-<span class="va">rD</span><span class="op">$</span><span class="va">server</span><span class="op">$</span><span class="kw">stop</span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Create RSelenium session</span></span>
+<span><span class="va">rD</span> <span class="op">&lt;-</span> <span class="fu">RSelenium</span><span class="fu">::</span><span class="fu">rsDriver</span><span class="op">(</span>browser <span class="op">=</span> <span class="st">"firefox"</span>, port <span class="op">=</span> <span class="fl">4548L</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Call scrappy</span></span>
+<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">scrappy</span><span class="fu">::</span><span class="fu"><a href="reference/newa_nrcc.html">newa_nrcc</a></span><span class="op">(</span></span>
+<span>  client <span class="op">=</span> <span class="va">rD</span><span class="op">$</span><span class="va">client</span>,</span>
+<span>  year <span class="op">=</span> <span class="fl">2020</span>,</span>
+<span>  month <span class="op">=</span> <span class="fl">12</span>, <span class="co"># December</span></span>
+<span>  station <span class="op">=</span> <span class="st">"gbe"</span>, <span class="co"># Geneva (Bejo) station</span></span>
+<span>  save_file <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> <span class="co"># Don't save output to a CSV file</span></span>
+<span><span class="co"># Stop server</span></span>
+<span><span class="va">rD</span><span class="op">$</span><span class="va">server</span><span class="op">$</span><span class="kw">stop</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Partial output from the previous example:</p>
 <table class="table">
 <colgroup>
 <col width="13%">
 <col width="8%">
 <col width="10%">
-<col width="15%">
+<col width="14%">
 <col width="4%">
 <col width="9%">
 <col width="12%">
 <col width="13%">
 <col width="8%">
-<col width="4%">
+<col width="5%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Date/Time</th>
@@ -258,54 +254,350 @@
 </tbody>
 </table>
 </div>
+<div class="section level3">
+<h3 id="google-maps">Google Maps<a class="anchor" aria-label="anchor" href="#google-maps"></a>
+</h3>
+<p>Extract the reviews for Sefton Park in Liverpool (only the 20 most recent):</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create RSelenium session</span></span>
+<span><span class="va">rD</span> <span class="op">&lt;-</span> <span class="fu">RSelenium</span><span class="fu">::</span><span class="fu">rsDriver</span><span class="op">(</span>browser <span class="op">=</span> <span class="st">"firefox"</span>, port <span class="op">=</span> <span class="fl">4548L</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Call scrappy</span></span>
+<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">scrappy</span><span class="fu">::</span><span class="fu"><a href="reference/google_maps.html">google_maps</a></span><span class="op">(</span></span>
+<span>  client <span class="op">=</span> <span class="va">rD</span><span class="op">$</span><span class="va">client</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"Sefton Park"</span>,</span>
+<span>  max_reviews <span class="op">=</span> <span class="fl">20</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># Stop server</span></span>
+<span><span class="va">rD</span><span class="op">$</span><span class="va">server</span><span class="op">$</span><span class="kw">stop</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Output after removing original authors’ names and URL to their profiles:</p>
+<table class="table">
+<colgroup>
+<col width="8%">
+<col width="2%">
+<col width="2%">
+<col width="63%">
+<col width="1%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="5%">
+<col width="4%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">id</th>
+<th align="left">author</th>
+<th align="left">author_url</th>
+<th align="left">comment</th>
+<th align="right">rating</th>
+<th align="left">locality</th>
+<th align="right">total_reviews</th>
+<th align="left">date_relative</th>
+<th align="left">date_absolute</th>
+<th align="left">date_downloaded</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSUNCcUxlU1RREAE</td>
+<td align="left">Author 1</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right">4</td>
+<td align="left">Local Guide</td>
+<td align="right">19</td>
+<td align="left">6 hours ago</td>
+<td align="left">2022-12-16 03:08:37 GMT</td>
+<td align="left">2022-12-16 09:08:37</td>
+</tr>
+<tr class="even">
+<td align="left">ChdDSUhNMG9nS0VJQ0FnSUNCOE1PRTN3RRAB</td>
+<td align="left">Author 2</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">5</td>
+<td align="left">20 hours ago</td>
+<td align="left">2022-12-15 13:08:38 GMT</td>
+<td align="left">2022-12-16 09:08:38</td>
+</tr>
+<tr class="odd">
+<td align="left">ChdDSUhNMG9nS0VJQ0FnSUNCa0xlbGxBRRAB</td>
+<td align="left">Author 3</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right">5</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="left">a day ago</td>
+<td align="left">2022-12-15 09:08:38 GMT</td>
+<td align="left">2022-12-16 09:08:38</td>
+</tr>
+<tr class="even">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSURPanBDUVVREAE</td>
+<td align="left">Author 4</td>
+<td align="left"></td>
+<td align="left">Cold and icy but still brilliant.. The local parakeets are still there by the lake, freezing their feathers off.</td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">9</td>
+<td align="left">a day ago</td>
+<td align="left">2022-12-15 09:08:38 GMT</td>
+<td align="left">2022-12-16 09:08:38</td>
+</tr>
+<tr class="odd">
+<td align="left">ChdDSUhNMG9nS0VJQ0FnSUQtci0yd2hRRRAB</td>
+<td align="left">Author 5</td>
+<td align="left"></td>
+<td align="left">Great place for long walks, running and having your kids and dogs all around this natural beauty !</td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">10</td>
+<td align="left">3 days ago</td>
+<td align="left">2022-12-13 09:08:38 GMT</td>
+<td align="left">2022-12-16 09:08:38</td>
+</tr>
+<tr class="even">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSUNpLXJpWE53EAE</td>
+<td align="left">Author 6</td>
+<td align="left"></td>
+<td align="left">Amazing city park, great to walk in and around. You can even spend the whole day there with your family having a BBQ. Two cafes and lots of great walks and lakes and streams. Africa Oye also uses the park as its venue as well as lots of other events. World class park.</td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">105</td>
+<td align="left">3 days ago</td>
+<td align="left">2022-12-13 09:08:38 GMT</td>
+<td align="left">2022-12-16 09:08:38</td>
+</tr>
+<tr class="odd">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSUQtbDRmMkJnEAE</td>
+<td align="left">Author 7</td>
+<td align="left"></td>
+<td align="left">(Translated by Google) Nice to come and stroll in the park to forget the city (Original) Sympa pour venir flâner dans le parc pour oublier la ville</td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">51</td>
+<td align="left">4 days ago</td>
+<td align="left">2022-12-12 09:08:38 GMT</td>
+<td align="left">2022-12-16 09:08:38</td>
+</tr>
+<tr class="even">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSUQtbDVhWVd3EAE</td>
+<td align="left">Author 8</td>
+<td align="left"></td>
+<td align="left">Lovely park.</td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">12</td>
+<td align="left">4 days ago</td>
+<td align="left">2022-12-12 09:08:38 GMT</td>
+<td align="left">2022-12-16 09:08:38</td>
+</tr>
+<tr class="odd">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSUQtNl9uZVFBEAE</td>
+<td align="left">Author 9</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">17</td>
+<td align="left">6 days ago</td>
+<td align="left">2022-12-10 09:08:38 GMT</td>
+<td align="left">2022-12-16 09:08:38</td>
+</tr>
+<tr class="even">
+<td align="left">ChdDSUhNMG9nS0VJQ0FnSUQtNjlIdHh3RRAB</td>
+<td align="left">Author 10</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">4</td>
+<td align="left">6 days ago</td>
+<td align="left">2022-12-10 09:08:38 GMT</td>
+<td align="left">2022-12-16 09:08:38</td>
+</tr>
+<tr class="odd">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSURVbWZydlF3EAE</td>
+<td align="left">Author 11</td>
+<td align="left"></td>
+<td align="left">Lovely walks around park with lots to show children as well. Ending up with tea in the Palm House.</td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">174</td>
+<td align="left">a week ago</td>
+<td align="left">2022-12-09 09:08:39 GMT</td>
+<td align="left">2022-12-16 09:08:39</td>
+</tr>
+<tr class="even">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSUQtM2VYSmN3EAE</td>
+<td align="left">Author 12</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">8</td>
+<td align="left">a week ago</td>
+<td align="left">2022-12-09 09:08:39 GMT</td>
+<td align="left">2022-12-16 09:08:39</td>
+</tr>
+<tr class="odd">
+<td align="left">ChdDSUhNMG9nS0VJQ0FnSURNcDZEN21BRRAB</td>
+<td align="left">Author 13</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">10</td>
+<td align="left">a week ago</td>
+<td align="left">2022-12-09 09:08:39 GMT</td>
+<td align="left">2022-12-16 09:08:39</td>
+</tr>
+<tr class="even">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSUQtN2FqS0RBEAE</td>
+<td align="left">Author 14</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right">4</td>
+<td align="left">Local Guide</td>
+<td align="right">21</td>
+<td align="left">a week ago</td>
+<td align="left">2022-12-09 09:08:39 GMT</td>
+<td align="left">2022-12-16 09:08:39</td>
+</tr>
+<tr class="odd">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSUQtdGVuTVBnEAE</td>
+<td align="left">Author 15</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">35</td>
+<td align="left">a week ago</td>
+<td align="left">2022-12-09 09:08:39 GMT</td>
+<td align="left">2022-12-16 09:08:39</td>
+</tr>
+<tr class="even">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSUQteGNhcmZBEAE</td>
+<td align="left">Author 16</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">463</td>
+<td align="left">a week ago</td>
+<td align="left">2022-12-09 09:08:39 GMT</td>
+<td align="left">2022-12-16 09:08:39</td>
+</tr>
+<tr class="odd">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSUQtbWZ1QkZREAE</td>
+<td align="left">Author 17</td>
+<td align="left"></td>
+<td align="left">Very nice park. Lots of space for family and play areas for kids.</td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">2</td>
+<td align="left">a week ago</td>
+<td align="left">2022-12-09 09:08:39 GMT</td>
+<td align="left">2022-12-16 09:08:39</td>
+</tr>
+<tr class="even">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSUQtcVppTFl3EAE</td>
+<td align="left">Author 18</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">2</td>
+<td align="left">a week ago</td>
+<td align="left">2022-12-09 09:08:39 GMT</td>
+<td align="left">2022-12-16 09:08:39</td>
+</tr>
+<tr class="odd">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSUQtM3JiQVNBEAE</td>
+<td align="left">Author 19</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">34</td>
+<td align="left">2 weeks ago</td>
+<td align="left">2022-12-02 09:08:39 GMT</td>
+<td align="left">2022-12-16 09:08:39</td>
+</tr>
+<tr class="even">
+<td align="left">ChZDSUhNMG9nS0VJQ0FnSUQtem9qWkNBEAE</td>
+<td align="left">Author 20</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right">5</td>
+<td align="left">Local Guide</td>
+<td align="right">21</td>
+<td align="left">2 weeks ago</td>
+<td align="left">2022-12-02 09:08:39 GMT</td>
+<td align="left">2022-12-16 09:08:39</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=scrappy">https://​cloud.r-project.org/​package=scrappy</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/villegar/scrappy/">https://​github.com/​villegar/​scrappy/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/villegar/scrappy/issues/">https://​github.com/​villegar/​scrappy/​issues/​</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Roberto Villegas-Diaz <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-5036-8661" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="https://cloud.r-project.org/package=scrappy" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/villegar/scrappy/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/villegar/scrappy/issues/" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=scrappy"><img src="https://www.r-pkg.org/badges/version/scrappy?color=black"></a></li>
-<li><a href="https://github.com/villegar/scrappy"><img src="https://img.shields.io/badge/devel%20version-0.0.2-yellow.svg"></a></li>
-<li><a href="https://github.com/villegar/scrappy/actions"><img src="https://github.com/villegar/scrappy/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing scrappy</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Roberto Villegas-Diaz <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-5036-8661" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=scrappy" class="external-link"><img src="https://www.r-pkg.org/badges/version/scrappy?color=black"></a></li>
+<li><a href="https://github.com/villegar/scrappy" class="external-link"><img src="https://img.shields.io/badge/devel%20version-0.0.2-yellow.svg"></a></li>
+<li><a href="https://github.com/villegar/scrappy/actions" class="external-link"><img src="https://github.com/villegar/scrappy/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Roberto Villegas-Diaz.</p>
+  <p></p>
+<p>Developed by Roberto Villegas-Diaz.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -313,6 +605,8 @@
 
   
 
+
+  
 
   </body>
 </html>
