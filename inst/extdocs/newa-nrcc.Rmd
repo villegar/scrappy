@@ -14,7 +14,8 @@ stations <- c("acc", "kalb", "alb")
 years <- 2015:2020
 months <- 1:12
 
-combinations <- data.frame(station = rep(stations, each = length(years) * length(months)),
+combinations <- data.frame(station = rep(stations,
+                                         each = length(years) * length(months)),
                            year = rep(years, each = length(months)),
                            month = months,
                            downloaded = FALSE)
@@ -45,10 +46,10 @@ for (i in seq_len(nrow(combinations))) {
     # Check if the data has been downloaded
     if (!combinations$downloaded[i]) {
       # Call scrappy
-      scrappy::newa_nrcc(client = rD$client, 
+      scrappy::newa_nrcc(client = rD$client,
                          year = combinations$year[i],
                          month = combinations$month[i],
-                         station = combinations$station[i], 
+                         station = combinations$station[i],
                          path = outputdir)
       combinations$downloaded[i] <- TRUE
     }
@@ -75,7 +76,7 @@ for (s in seq_len(length(stations))) {
   if (length(files) > 0) {
     message(length(files), " files found...")
     combined_data <- NULL
-    for(f in files) {
+    for (f in files) {
       aux <- read.csv(f)
       if (is.null(combined_data)) {
         combined_data <- aux
@@ -103,9 +104,9 @@ rD$client$navigate("http://newa.cornell.edu/index.php?page=station-pages")
 Sys.sleep(5)
 aux <- rD$client$getPageSource()[[1]] %>%
     xml2::read_html() %>% # parse HTML
-    rvest::html_nodes("table.table") 
+    rvest::html_nodes("table.table")
 
-station_code <- aux %>% 
+station_code <- aux %>%
   rvest::html_nodes("a") %>%
   rvest::html_attr("href") %>%
   gsub(pattern = ".*=", replacement = "")

@@ -5,7 +5,7 @@ Authors@R: c(
     person(given = "Roberto",
            family = "Villegas-Diaz",
            role = c("aut", "cre"),
-           email = "villegas.roberto@hotmail.com",
+           email = "r.villegas-diaz@outlook.com",
            comment = c(ORCID = "0000-0001-5036-8661")))
 Description: A group of functions to scrape data from different websites, for 
     academic purposes.
@@ -13,14 +13,21 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 URL: https://github.com/villegar/scrappy/, 
      https://villegar.github.io/scrappy/
 BugReports: https://github.com/villegar/scrappy/issues/
 Language: en-GB
 Imports:
+    dplyr,
+    httr,
+    jsonlite,
+    lubridate,
     magrittr,
+    purrr,
     rvest,
+    stringr,
+    tibble,
     xml2
 Depends: 
     R (>= 2.10)

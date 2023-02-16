@@ -7,9 +7,9 @@
 \format{
 A data frame with 718 rows and 3 variables:
 \describe{
-\item{name}{Station name.}
-\item{state}{State name.}
-\item{code}{Station code.}
+\item{name}{Station's name.}
+\item{state}{State where the station is located.}
+\item{code}{Station's code.}
 }
 }
 \source{

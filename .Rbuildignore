@@ -14,3 +14,5 @@
 ^inst/extdocs$
 ^inst/images$
 ^data-raw$
+^\.lintr$
+^README_cache$
