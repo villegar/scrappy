@@ -227,7 +227,7 @@ overall_rating <- function(client,
   total_reviews <- tryCatch(
     {
       overall_reviews_stars_html %>%
-        rvest::html_element(xpath = "/html/body/span[2]/span[1]/button") %>%
+        rvest::html_element(xpath = "/html/body/span[2]/span[1]/span") %>%
         rvest::html_text() %>%
         stringr::str_remove_all("review[s]*|,") %>%
         as.numeric()
