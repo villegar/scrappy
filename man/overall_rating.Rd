@@ -7,7 +7,7 @@
 overall_rating(
   client,
   using = "xpath",
-  value = "//div[@jsaction='pane.rating.moreReviews']"
+  value = "//div[@jsaction='pane.reviewChart.moreReviews']"
 )
 }
 \arguments{
