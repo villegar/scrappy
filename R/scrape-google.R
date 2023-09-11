@@ -186,7 +186,7 @@ handle_cookies <- function(client,
 #' @keywords internal
 overall_rating <- function(client,
                            using = "xpath",
-                           value = "//div[@jsaction=\'pane.rating.moreReviews\']") {
+                           value = "//div[@jsaction=\'pane.reviewChart.moreReviews\']") {
   # Initialise outputs
   stars <- NA_real_
   total_reviews <- NA_integer_
@@ -214,7 +214,7 @@ overall_rating <- function(client,
   stars <- tryCatch(
     {
       overall_reviews_stars_html %>%
-        rvest::html_element(xpath = "/html/body/span[1]/span/span[1]") %>%
+        rvest::html_element(xpath = "/html/body/div[2]/div[1]") %>%
         rvest::html_text() %>%
         as.numeric()
     },
@@ -227,7 +227,7 @@ overall_rating <- function(client,
   total_reviews <- tryCatch(
     {
       overall_reviews_stars_html %>%
-        rvest::html_element(xpath = "/html/body/span[2]/span[1]/button") %>%
+        rvest::html_element(xpath = "/html/body/div[2]/button") %>%
         rvest::html_text() %>%
         stringr::str_remove_all("review[s]*|,") %>%
         as.numeric()
@@ -247,6 +247,7 @@ overall_rating <- function(client,
           value = "//button[@jsaction=\'pane.reviewChart.moreReviews\']"
         )
         more_reviews_link[[1]]$getElementAttribute("innerHTML")[[1]] %>%
+          stringr::str_extract_all("[0-9,]+\\s*review[s]*") %>%
           stringr::str_remove_all("review[s]*|,") %>%
           as.numeric()
       },
