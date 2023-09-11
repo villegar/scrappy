@@ -279,13 +279,16 @@ parse_reviews <- function(reviews) {
       review_id <- item_html %>%
         rvest::html_element(xpath = "//div") %>%
         rvest::html_attr("data-review-id")
-      review_locality <- item_html %>%
-        rvest::html_element(xpath = "/html/body/div/div[3]/div[2]/div[2]/div[1]/a/div[2]/span[1]") %>%
+      review_local_and_count <- item_html %>%
+        rvest::html_element(xpath = "/html/body/div/div/div[2]/div[2]/div[1]/button/div[2]") %>%
         rvest::html_text() %>%
         stringr::str_squish()
-      review_total_reviews <- item_html %>%
-        rvest::html_element(xpath = "/html/body/div/div[3]/div[2]/div[2]/div[1]/a/div[2]/span[2]") %>%
-        rvest::html_text() %>%
+      review_locality <- review_local_and_count %>%
+        stringr::str_extract_all("^[a-zA-Z\\s]*") %>%
+        stringr::str_squish()
+      review_total_reviews <- review_local_and_count %>%
+        stringr::str_extract_all("[0-9]+[a-zA-Z\\s]*$") %>%
+        stringr::str_squish() %>%
         stringr::str_extract("[0-9]+") %>%
         as.integer()
       review_author <- item_html %>%
@@ -293,8 +296,8 @@ parse_reviews <- function(reviews) {
         rvest::html_text() %>%
         stringr::str_squish()
       review_author_url <- item_html %>%
-        rvest::html_element(xpath = "/html/body/div/div[3]/div[2]/div[2]/div[1]/a") %>%
-        rvest::html_attr("href") %>%
+        rvest::html_element(xpath = "/html/body/div/div/div[2]/div[2]/div[1]/button") %>%
+        rvest::html_attr("data-href") %>%
         stringr::str_squish()
       review_comment <- item_html %>%
         # rvest::html_element(".MyEned") %>%
