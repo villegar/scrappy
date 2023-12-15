@@ -79,6 +79,33 @@ find_element <- function(client, using, value) {
   )
 }
 
+#' Search for an element on the page and click it
+#'
+#' Search for an element on the page, starting from the document root.
+#'
+#' @param client \code{RSelenium} client.
+#' @param using String with "css" or "xpath".
+#' @param value String with css tag or xpath.
+#'
+#' @return The located element will be returned as an object of `webElement`
+#'     class.
+#' @keywords internal
+find_and_click <- function(client, using, value) {
+  tryCatch(
+    {
+      suppressMessages({
+        client$findElement(using = using, value = value)$clickElement()
+      })
+    },
+    warning = function(w) {
+      return(NA)
+    },
+    error = function(e) {
+      return(NA)
+    }
+  )
+}
+
 #' Search for multiple elements on the page
 #'
 #' Search for multiple elements on the page, starting from the document root.
@@ -129,4 +156,14 @@ navigate <- function(client, url) {
     finally = {
     }
   )
+}
+
+#' Random wait time
+#'
+#' @param sleep Integer with number of seconds to use as pause between actions
+#'     on the web page.
+#'
+#' @keywords internal
+random_wait <- function(sleep = 1) {
+  Sys.sleep(sample(seq(0, sleep, by = 0.1), 1))
 }
