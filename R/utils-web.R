@@ -22,6 +22,6 @@ wait_to_load <- function(client, using = "css", value = "body", sleep = 1) {
         NULL
       }
     )
-    Sys.sleep(sample(seq(0, sleep, by = 0.1), 1)) # wait a random number of sec.
+    random_wait(sleep) # wait a random number of sec.
   }
 }
