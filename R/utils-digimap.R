@@ -107,21 +107,23 @@ digimap_os <- function(client,
 
     # get versions
     versions <- find_elements(client, "xpath", '//*[@role="option"]')
-    versions_txt <- purrr::map_chr(versions, function(v) {
-      v$getElementAttribute("innerHTML")[[1]] |>
-        xml2::read_html() |>
-        rvest::html_text() |>
-        stringr::str_squish()
-    })
-    # match version to available versions
-    idx <- version == versions_txt
-    if (sum(idx) < 0) {
-      message("The chosen version is not available, `", version, "`.")
-      message("Please, choose one of the following: \n",
-              paste0("- ", versions_txt, collapse = "\n"))
-      return(FALSE)
+    if (length(versions) > 0) {
+      versions_txt <- purrr::map_chr(versions, function(v) {
+        v$getElementAttribute("innerHTML")[[1]] |>
+          xml2::read_html() |>
+          rvest::html_text() |>
+          stringr::str_squish()
+      })
+      # match version to available versions
+      idx <- version == versions_txt
+      if (sum(idx) < 1) {
+        message("The chosen version is not available, `", version, "`.")
+        message("Please, choose one of the following: \n",
+                paste0("- ", versions_txt, collapse = "\n"))
+        return(FALSE)
+      }
+      versions[idx][[1]]$clickElement()
     }
-    versions[idx][[1]]$clickElement()
   }
 
   # format drop-down
