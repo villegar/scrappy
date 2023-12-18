@@ -122,8 +122,8 @@ newa_nrcc3 <- function(year,
         body = body
       )
       contents <- httr::content(request)
-      if (typeof(contents) == "character" &&
-        grepl("Invalid Request|sid", contents)) {
+      if (typeof(contents) == "character" && grepl("Invalid Request|sid",
+                                                   contents)) {
         stop("'", station, "' is not a valid station code", call. = FALSE)
       }
       contents <- contents %>%

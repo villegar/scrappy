@@ -35,7 +35,7 @@ digimap_os <- function(client,
                        org = Sys.getenv("ORG"),
                        sleep = 1) {
   # check if key variables are NULL
-  if (is.null(area_name) & is.null(dataset)) {
+  if (is.null(area_name) && is.null(dataset)) {
     message("[ERROR] Both the `area_name` and `dataset` are required!")
     return(FALSE)
   }
@@ -160,8 +160,10 @@ digimap_os <- function(client,
   # update download name
   xpath_download_name_txt <- '//*[@id="mat-input-2"]'
   download_name_txt <- find_element(client, "xpath", xpath_download_name_txt)
-  download_name_txt$sendKeysToElement(
-    list(paste0(download_suffix, " - ", area_name), key = "enter"))
+  download_name_txt$sendKeysToElement(list(paste0(download_suffix,
+                                                  " - ",
+                                                  area_name),
+                                           key = "enter"))
   random_wait(sleep) # sleep for a random time
 
   # request download

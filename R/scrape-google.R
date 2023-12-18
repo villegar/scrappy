@@ -87,11 +87,8 @@ google_maps <- function(client,
   handle_cookies(client, sleep = sleep)
 
   # check if there are multiple results
-  search_results <-
-    find_elements(client,
-                  "xpath",
-                  sprintf("//div[@aria-label='Results for %s']/div/div/a", name)
-                  )
+  value <- sprintf("//div[@aria-label='Results for %s']/div/div/a", name)
+  search_results <- find_elements(client, "xpath", value)
 
   if (length(search_results) > 1) {
     message(sprintf("%d results were found, using result %d!",
@@ -126,9 +123,7 @@ google_maps <- function(client,
   n_reviews <- 0
   parsed_reviews <- tibble::tibble()
   while (n_reviews < min(max_reviews,
-    overall_rating$total_reviews,
-    na.rm = TRUE
-  )) {
+                         overall_rating$total_reviews, na.rm = TRUE)) {
     expand_reviews(client) # expand long reviews
     # retrieve all the reviews
     reviews <- find_elements(client, "css", "div.jftiEf.fontBodyMedium")

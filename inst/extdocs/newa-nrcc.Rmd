@@ -38,9 +38,10 @@ Retrieve data
 outputdir <- getwd()
 
 # Create progress bar
-pb <- progress::progress_bar$new(
-    format = "(:current/:total) [:bar] :percent",
-    total = nrow(combinations), clear = FALSE, width = 80)
+pb <- progress::progress_bar$new(format = "(:current/:total) [:bar] :percent",
+                                 total = nrow(combinations),
+                                 clear = FALSE,
+                                 width = 80)
 for (i in seq_len(nrow(combinations))) {
   tryCatch({
     # Check if the data has been downloaded
@@ -103,8 +104,8 @@ rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
 rD$client$navigate("http://newa.cornell.edu/index.php?page=station-pages")
 Sys.sleep(5)
 aux <- rD$client$getPageSource()[[1]] %>%
-    xml2::read_html() %>% # parse HTML
-    rvest::html_nodes("table.table")
+  xml2::read_html() %>% # parse HTML
+  rvest::html_nodes("table.table")
 
 station_code <- aux %>%
   rvest::html_nodes("a") %>%

@@ -53,8 +53,6 @@ find_a_gp <- function(client,
 #' @return Tibble with the GP practices
 #' @keywords internal
 parse_gpp <- function(gpp) {
-  # local bindings
-  . <- NULL
   seq_along(gpp) |>
     purrr::map_df(function(idx) {
       item <- gpp[[idx]]
