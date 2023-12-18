@@ -1,90 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/404.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/index.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/news/index.html</loc>
   </url>
   <url>
-    <loc>/pull_request_template.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/pull_request_template.html</loc>
   </url>
   <url>
-    <loc>/reference/click_element.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/click_element.html</loc>
   </url>
   <url>
-    <loc>/reference/duration2datetime.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/digimap_os.html</loc>
   </url>
   <url>
-    <loc>/reference/execute_script.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/duration2datetime.html</loc>
   </url>
   <url>
-    <loc>/reference/expand_reviews.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/execute_script.html</loc>
   </url>
   <url>
-    <loc>/reference/find_element.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/expand_reviews.html</loc>
   </url>
   <url>
-    <loc>/reference/find_elements.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/find_a_gp.html</loc>
   </url>
   <url>
-    <loc>/reference/google_maps.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/find_and_click.html</loc>
   </url>
   <url>
-    <loc>/reference/handle_cookies.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/find_element.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/find_elements.html</loc>
   </url>
   <url>
-    <loc>/reference/navigate.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/google_maps.html</loc>
   </url>
   <url>
-    <loc>/reference/newa3_stations.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/handle_cookies.html</loc>
   </url>
   <url>
-    <loc>/reference/newa_nrcc.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/newa_nrcc3.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/navigate.html</loc>
   </url>
   <url>
-    <loc>/reference/newa_stations.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/newa3_stations.html</loc>
   </url>
   <url>
-    <loc>/reference/overall_rating.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/newa_nrcc.html</loc>
   </url>
   <url>
-    <loc>/reference/parse_reviews.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/newa_nrcc3.html</loc>
   </url>
   <url>
-    <loc>/reference/pipe.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/newa_stations.html</loc>
   </url>
   <url>
-    <loc>/reference/print.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/overall_rating.html</loc>
   </url>
   <url>
-    <loc>/reference/scrappy-package.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/parse_gpp.html</loc>
   </url>
   <url>
-    <loc>/reference/scroll_reviews.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/parse_reviews.html</loc>
   </url>
   <url>
-    <loc>/reference/sort_reviews.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>/reference/wait_to_load.html</loc>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/print.html</loc>
+  </url>
+  <url>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/random_wait.html</loc>
+  </url>
+  <url>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/scrappy-package.html</loc>
+  </url>
+  <url>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/scroll_reviews.html</loc>
+  </url>
+  <url>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/sort_reviews.html</loc>
+  </url>
+  <url>
+    <loc>https://scrappy.robertovillegas-diaz.com/reference/wait_to_load.html</loc>
   </url>
 </urlset>
