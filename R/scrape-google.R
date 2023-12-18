@@ -28,6 +28,8 @@ expand_reviews <- function(client,
 #'     returned.
 #' @param with_text Boolean value to indicate if the `max_reviews` should only
 #'     account for those reviews with a comment.
+#' @param result_id Integer with the result position to use, only relevant when
+#'     multiple matches for the given `name` are found.
 #'
 #' @return Tibble with the reviews extracted from Google Maps.
 #' @export
@@ -64,6 +66,7 @@ google_maps <- function(client,
                         base = "https://www.google.com/maps/search/?api=1&query=",
                         sleep = 1,
                         max_reviews = 100,
+                        result_id = 1,
                         with_text = FALSE) {
   # local bindings
   . <- html_el_id <- NULL
@@ -82,6 +85,23 @@ google_maps <- function(client,
 
   # handle cookies page
   handle_cookies(client, sleep = sleep)
+
+  # check if there are multiple results
+  search_results <-
+    find_elements(client,
+                  "xpath",
+                  sprintf("//div[@aria-label='Results for %s']/div/div/a", name)
+                  )
+
+  if (length(search_results) > 1) {
+    message(sprintf("%d results were found, using result %d!",
+                    length(search_results),
+                    result_id))
+
+    # extract new URL
+    new_url <- search_results[result_id][[1]]$getElementAttribute("href")[[1]]
+    navigate(client, new_url)
+  }
 
   # get overall rating for the place
   overall_rating <- overall_rating(client)
