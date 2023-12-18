@@ -13,6 +13,7 @@ Useful links:
 \itemize{
   \item \url{https://github.com/villegar/scrappy/}
   \item \url{https://villegar.github.io/scrappy/}
+  \item \url{https://scrappy.robertovillegas-diaz.com/}
   \item Report bugs at \url{https://github.com/villegar/scrappy/issues/}
 }
 
