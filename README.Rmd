@@ -46,7 +46,7 @@ you can replace the value of `browser` in the call to `RSelenium::rsDriver`.
 
 ```{r run-examples-hidden-code, echo = FALSE, message = FALSE, output = FALSE, cache = TRUE}
 # Create RSelenium session
-rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
+rD <- RSelenium::rsDriver(browser = "firefox", port = 4549L, verbose = FALSE)
 
 # Call scrappy
 out_newa <- scrappy::newa_nrcc(
@@ -62,6 +62,9 @@ out_gmaps <- scrappy::google_maps(
   name = "Sefton Park",
   max_reviews = 20
 )
+
+out_gpp <- scrappy::find_a_gp(rD$client, postcode = "L69 3GL")
+
 # Stop server
 conn <- rD$server$stop()
 ```
@@ -72,7 +75,7 @@ Website: http://newa.cornell.edu
 
 ```{r example-newa, eval = FALSE}
 # Create RSelenium session
-rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
+rD <- RSelenium::rsDriver(browser = "firefox", port = 4549L, verbose = FALSE)
 
 # Call scrappy
 out <- scrappy::newa_nrcc(
@@ -96,7 +99,7 @@ knitr::kable(head(out_newa, 10))
 Extract the reviews for Sefton Park in Liverpool (only the 20 most recent):
 ```{r example-google-maps, eval = FALSE}
 # Create RSelenium session
-rD <- RSelenium::rsDriver(browser = "firefox", port = 4548L, verbose = FALSE)
+rD <- RSelenium::rsDriver(browser = "firefox", port = 4549L, verbose = FALSE)
 
 # Call scrappy
 out <- scrappy::google_maps(
@@ -117,4 +120,22 @@ out_gmaps %>%
     author_url = ""
   ) %>%
   knitr::kable()
+```
+
+### NHS GP practices by postcode
+
+```{r example-nhs-gpp, eval = FALSE}
+# Create RSelenium session
+rD <- RSelenium::rsDriver(browser = "firefox", port = 4549L, verbose = FALSE)
+
+# Retrieve GP practices near L69 3GL
+# (Waterhouse building, University of Liverpool)
+out <- scrappy::find_a_gp(rD$client, postcode = "L69 3GL")
+
+# Stop server
+rD$server$stop()
+```
+
+```{r, echo = FALSE}
+knitr::kable(out_gpp)
 ```
