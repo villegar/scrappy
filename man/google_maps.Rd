@@ -11,6 +11,7 @@ google_maps(
   base = "https://www.google.com/maps/search/?api=1&query=",
   sleep = 1,
   max_reviews = 100,
+  result_id = 1,
   with_text = FALSE
 )
 }
@@ -30,6 +31,9 @@ on the web page.}
 \item{max_reviews}{Integer with the maximum number of reviews to scrape. The
 number of existing reviews will define the actual number of reviews
 returned.}
+
+\item{result_id}{Integer with the result position to use, only relevant when
+multiple matches for the given \code{name} are found.}
 
 \item{with_text}{Boolean value to indicate if the \code{max_reviews} should only
 account for those reviews with a comment.}
