@@ -79,12 +79,14 @@ digimap_os <- function(client,
   } else if (grepl("OS MM Greenspace", dataset)) { # OS MasterMap Greenspace
     select_dataset(client, "OS MasterMap", "Greenspace", sleep)
     download_suffix <- "OS MM GS"
-  } else if (grepl("OS MM Water|Water Network", dataset)) {# OS-MM Water Network
+  } else if (grepl("OS MM Water|Water Network", dataset)) { # OS-MM Water Network
     select_dataset(client, "OS MasterMap", "Water Network", sleep)
     download_suffix <- "OS MM Water"
   } else if ("OS Terrain-5" %in% dataset) { # OS Terrain 5 Contours
-    select_dataset(client, "Land and Height Data", "OS Terrain 5 Contours",
-                   sleep)
+    select_dataset(
+      client, "Land and Height Data", "OS Terrain 5 Contours",
+      sleep
+    )
     download_suffix <- "OS Terrain-5"
   } else if ("OS Terrain-5 DTM" %in% dataset) { # OS Terrain 5 DTM
     select_dataset(client, "Land and Height Data", "OS Terrain 5 DTM", sleep)
@@ -118,8 +120,10 @@ digimap_os <- function(client,
       idx <- version == versions_txt
       if (sum(idx) < 1) {
         message("The chosen version is not available, `", version, "`.")
-        message("Please, choose one of the following: \n",
-                paste0("- ", versions_txt, collapse = "\n"))
+        message(
+          "Please, choose one of the following: \n",
+          paste0("- ", versions_txt, collapse = "\n")
+        )
         return(FALSE)
       }
       versions[idx][[1]]$clickElement()
@@ -139,16 +143,20 @@ digimap_os <- function(client,
       stringr::str_squish()
   })
   if (is.null(format)) {
-    message("Please choose one of the following formats: \n",
-            paste0("- ", formats_txt[-1], collapse = "\n"))
+    message(
+      "Please choose one of the following formats: \n",
+      paste0("- ", formats_txt[-1], collapse = "\n")
+    )
     return(FALSE)
   } else {
     # match version to available versions
     idx <- format == formats_txt
     if (sum(idx) < 0) {
       message("The chosen format is not available, `", format, "`.")
-      message("Please, choose one of the following: \n",
-              paste0("- ", formats_txt, collapse = "\n"))
+      message(
+        "Please, choose one of the following: \n",
+        paste0("- ", formats_txt, collapse = "\n")
+      )
       return(FALSE)
     }
     formats[idx][[1]]$clickElement()
@@ -160,10 +168,14 @@ digimap_os <- function(client,
   # update download name
   xpath_download_name_txt <- '//*[@id="mat-input-2"]'
   download_name_txt <- find_element(client, "xpath", xpath_download_name_txt)
-  download_name_txt$sendKeysToElement(list(paste0(download_suffix,
-                                                  " - ",
-                                                  area_name),
-                                           key = "enter"))
+  download_name_txt$sendKeysToElement(list(
+    paste0(
+      download_suffix,
+      " - ",
+      area_name
+    ),
+    key = "enter"
+  ))
   random_wait(sleep) # sleep for a random time
 
   # request download

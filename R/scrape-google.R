@@ -91,9 +91,11 @@ google_maps <- function(client,
   search_results <- find_elements(client, "xpath", value)
 
   if (length(search_results) > 1) {
-    message(sprintf("%d results were found, using result %d!",
-                    length(search_results),
-                    result_id))
+    message(sprintf(
+      "%d results were found, using result %d!",
+      length(search_results),
+      result_id
+    ))
 
     # extract new URL
     new_url <- search_results[result_id][[1]]$getElementAttribute("href")[[1]]
@@ -122,8 +124,9 @@ google_maps <- function(client,
   # scrape reviews
   n_reviews <- 0
   parsed_reviews <- tibble::tibble()
-  while (n_reviews < min(max_reviews,
-                         overall_rating$total_reviews, na.rm = TRUE)) {
+  min_num_reviews <-
+    min(max_reviews, overall_rating$total_reviews, na.rm = TRUE)
+  while (n_reviews < min_num_reviews) {
     expand_reviews(client) # expand long reviews
     # retrieve all the reviews
     reviews <- find_elements(client, "css", "div.jftiEf.fontBodyMedium")
