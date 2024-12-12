@@ -9,7 +9,7 @@
 #' @keywords internal
 expand_reviews <- function(client,
                            using = "xpath",
-                           value = "//button[@jsaction='pane.review.expandReview']") {
+                           value = "//button[contains(@jsaction, 'expandReview')]") {
   find_elements(client, using, value) %>%
     purrr::walk(click_element)
 }
