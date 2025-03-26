@@ -88,7 +88,7 @@ google_maps <- function(client,
                         result_id = 1,
                         with_text = FALSE) {
   # local bindings
-  . <- html_el_id <- NULL
+  . <- html_el_id <- date_absolute <- NULL
   # create URL by appending the name of the place to the base URL
   URL <- paste0(base, URLencode(name, reserved = TRUE))
   # check if place_id was passed to the function call, if so, append to the URL
