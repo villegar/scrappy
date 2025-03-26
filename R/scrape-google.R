@@ -14,6 +14,22 @@ expand_reviews <- function(client,
     purrr::walk(click_element)
 }
 
+#' Expand reviews
+#'
+#' Expand long reviews to capture all the comment
+#'
+#' @param element Reference element.
+#' @param using String with "css" or "xpath".
+#' @param value String with css tag or xpath.
+#'
+#' @keywords internal
+expand_reviews_2 <- function(element,
+                             using = "xpath",
+                             value = "//button[contains(@jsaction, 'expandReview')]") {
+  find_child_element(element, using, value) %>%
+    click_element()
+}
+
 #' Scrape Google Maps' reviews
 #'
 #' @param client \code{RSelenium} client.
@@ -26,6 +42,8 @@ expand_reviews <- function(client,
 #' @param max_reviews Integer with the maximum number of reviews to scrape. The
 #'     number of existing reviews will define the actual number of reviews
 #'     returned.
+#' @param max_date Maximum date for which reviews will be scraped. Default to
+#'     the earliest review available (`Inf`).
 #' @param with_text Boolean value to indicate if the `max_reviews` should only
 #'     account for those reviews with a comment.
 #' @param result_id Integer with the result position to use, only relevant when
@@ -66,6 +84,7 @@ google_maps <- function(client,
                         base = "https://www.google.com/maps/search/?api=1&query=",
                         sleep = 1,
                         max_reviews = 100,
+                        max_date = Inf,
                         result_id = 1,
                         with_text = FALSE) {
   # local bindings
@@ -121,6 +140,15 @@ google_maps <- function(client,
   # sort reviews by most recent
   sort_reviews(client, sleep = sleep)
 
+  # check if maximum date (if given) is valid
+  if (!is.infinite(max_date)) {
+    max_date = tryCatch({
+      as.Date(max_date)
+    }, error = function(e) {
+      Inf
+    })
+  }
+
   # scrape reviews
   n_reviews <- 0
   parsed_reviews <- tibble::tibble()
@@ -154,6 +182,18 @@ google_maps <- function(client,
     } else {
       n_reviews <- nrow(parsed_reviews)
     }
+    # check if maximum date (if given) has been crossed
+    if (!is.infinite(max_date)) {
+      tryCatch({
+        if (max(parsed_reviews$date_absolute) > max_date) {
+          parsed_reviews <- parsed_reviews |>
+            dplyr::filter(date_absolute <= max_date)
+          n_reviews <- Inf
+          break
+        }
+      }, error = function(e) {})
+    }
+    # scroll to obtain more reviews
     scroll_reviews(client)
   }
   parsed_reviews %>%
@@ -292,6 +332,7 @@ parse_reviews <- function(reviews) {
   . <- NULL
   reviews %>%
     purrr::map_df(function(item) {
+      expand_reviews_2(item) # expand long reviews
       item_html <- item$getElementAttribute("innerHTML")[[1]] %>%
         xml2::read_html()
       review_id <- item_html %>%
