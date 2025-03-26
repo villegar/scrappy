@@ -11,6 +11,7 @@ google_maps(
   base = "https://www.google.com/maps/search/?api=1&query=",
   sleep = 1,
   max_reviews = 100,
+  max_date = Inf,
   result_id = 1,
   with_text = FALSE
 )
@@ -31,6 +32,9 @@ on the web page.}
 \item{max_reviews}{Integer with the maximum number of reviews to scrape. The
 number of existing reviews will define the actual number of reviews
 returned.}
+
+\item{max_date}{Maximum date for which reviews will be scraped. Default to
+the earliest review available (\code{Inf}).}
 
 \item{result_id}{Integer with the result position to use, only relevant when
 multiple matches for the given \code{name} are found.}
