@@ -142,11 +142,14 @@ google_maps <- function(client,
 
   # check if maximum date (if given) is valid
   if (!is.infinite(max_date)) {
-    max_date <- tryCatch({
-      as.Date(max_date)
-    }, error = function(e) {
-      Inf
-    })
+    max_date <- tryCatch(
+      {
+        as.Date(max_date)
+      },
+      error = function(e) {
+        Inf
+      }
+    )
   }
 
   # scrape reviews
@@ -184,14 +187,17 @@ google_maps <- function(client,
     }
     # check if maximum date (if given) has been crossed
     if (!is.infinite(max_date)) {
-      tryCatch({
-        if (max(parsed_reviews$date_absolute) > max_date) {
-          parsed_reviews <- parsed_reviews |>
-            dplyr::filter(date_absolute <= max_date)
-          n_reviews <- Inf
-          break
-        }
-      }, error = function(e) {})
+      tryCatch(
+        {
+          if (max(parsed_reviews$date_absolute) > max_date) {
+            parsed_reviews <- parsed_reviews |>
+              dplyr::filter(date_absolute <= max_date)
+            n_reviews <- Inf
+            break
+          }
+        },
+        error = function(e) {}
+      )
     }
     # scroll to obtain more reviews
     scroll_reviews(client)
