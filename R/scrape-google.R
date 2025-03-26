@@ -142,7 +142,7 @@ google_maps <- function(client,
 
   # check if maximum date (if given) is valid
   if (!is.infinite(max_date)) {
-    max_date = tryCatch({
+    max_date <- tryCatch({
       as.Date(max_date)
     }, error = function(e) {
       Inf
