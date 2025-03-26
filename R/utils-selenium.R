@@ -52,6 +52,31 @@ execute_script <- function(client, script, args) {
   )
 }
 
+#' Search for a child element for current element
+#'
+#' @param element Reference element.
+#' @param using String with "css" or "xpath".
+#' @param value String with css tag or xpath.
+#'
+#' @return The located element will be returned as an object of `webElement`
+#'     class.
+#' @keywords internal
+find_child_element <- function(element, using, value) {
+  tryCatch(
+    {
+      suppressMessages({
+        element$findChildElement(using = using, value = value)
+      })
+    },
+    warning = function(w) {
+      return(NA)
+    },
+    error = function(e) {
+      return(NA)
+    }
+  )
+}
+
 #' Search for an element on the page
 #'
 #' Search for an element on the page, starting from the document root.
@@ -132,7 +157,6 @@ find_elements <- function(client, using, value) {
     }
   )
 }
-
 
 #' Navigate to a given url
 #'
