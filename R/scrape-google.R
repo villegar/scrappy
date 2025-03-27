@@ -42,8 +42,8 @@ expand_reviews_2 <- function(element,
 #' @param max_reviews Integer with the maximum number of reviews to scrape. The
 #'     number of existing reviews will define the actual number of reviews
 #'     returned.
-#' @param max_date Maximum date for which reviews will be scraped. Default to
-#'     the earliest review available (`Inf`).
+#' @param max_date Maximum (oldest) date for which reviews will be scraped.
+#'     Default to the earliest review available (`Inf`).
 #' @param with_text Boolean value to indicate if the `max_reviews` should only
 #'     account for those reviews with a comment.
 #' @param result_id Integer with the result position to use, only relevant when
@@ -58,6 +58,7 @@ expand_reviews_2 <- function(element,
 #' \dontrun{
 #' # Create RSelenium session
 #' rD <- RSelenium::rsDriver(browser = "firefox", port = 4544L, verbose = FALSE)
+#'
 #' # Retrieve reviews for Sefton Park in Liverpool
 #' sefton_park_reviews_tb <-
 #'   scrappy::google_maps(
@@ -75,6 +76,17 @@ expand_reviews_2 <- function(element,
 #'     max_reviews = 20,
 #'     with_text = TRUE
 #'   )
+#'
+#' sefton_park_reviews_tb_max_date <-
+#'   scrappy::google_maps(
+#'     client = rD$client,
+#'     name = "Sefton Park",
+#'     place_id = "ChIJrTCHJVkge0gRm1LWF0fSPgw",
+#'     max_reviews = Inf,
+#'     max_date = '2024-03-26',
+#'     with_text = TRUE
+#'   )
+#'
 #' # Stop server
 #' rD$server$stop()
 #' }
@@ -137,6 +149,9 @@ google_maps <- function(client,
     return(zero_reviews)
   }
 
+  # open reviews tab
+  open_reviews_tab(client)
+
   # sort reviews by most recent
   sort_reviews(client, sleep = sleep)
 
@@ -160,7 +175,12 @@ google_maps <- function(client,
   while (n_reviews < min_num_reviews) {
     expand_reviews(client) # expand long reviews
     # retrieve all the reviews
-    reviews <- find_elements(client, "css", "div.jftiEf.fontBodyMedium")
+    # reviews <- find_elements(client, "css", "div.jftiEf.fontBodyMedium")
+    reviews <- find_elements(client,
+                             "xpath",
+                             paste0("//div[contains(@jsaction, 'review.in')",
+                                    "and contains(@jsaction, 'review.out')]")
+    )
     # extract the unique identifier for the reviews HTML elements
     reviews_id <- reviews %>%
       purrr::map_chr(~ .x$elementId)
@@ -189,9 +209,9 @@ google_maps <- function(client,
     if (!is.infinite(max_date)) {
       tryCatch(
         {
-          if (max(parsed_reviews$date_absolute) > max_date) {
+          if (min(parsed_reviews$date_absolute) < max_date) {
             parsed_reviews <- parsed_reviews |>
-              dplyr::filter(date_absolute <= max_date)
+              dplyr::filter(as.Date(date_absolute) >= max_date)
             n_reviews <- Inf
             break
           }
@@ -239,6 +259,40 @@ handle_cookies <- function(client,
     }
   )
 }
+
+#' Open overview tab
+#'
+#' @inheritParams expand_reviews
+#' @inheritParams google_maps
+#'
+#' @keywords internal
+open_overview_tab <-
+  function(client,
+           using = "xpath",
+           value = "//button[@role='tab' and contains(., 'Overview')]",
+           sleep = 1) {
+    suppressWarnings({
+      find_and_click(client, using, value)
+      Sys.sleep(sleep)
+    })
+  }
+
+#' Open review's tab
+#'
+#' @inheritParams expand_reviews
+#' @inheritParams google_maps
+#'
+#' @keywords internal
+open_reviews_tab <-
+  function(client,
+           using = "xpath",
+           value = "//button[@role='tab' and contains(., 'Reviews')]",
+           sleep = 1) {
+    suppressWarnings({
+      find_and_click(client, using, value)
+      Sys.sleep(sleep)
+    })
+  }
 
 #' Overall rating of the place
 #'
@@ -338,63 +392,67 @@ parse_reviews <- function(reviews) {
   . <- NULL
   reviews %>%
     purrr::map_df(function(item) {
-      expand_reviews_2(item) # expand long reviews
-      item_html <- item$getElementAttribute("innerHTML")[[1]] %>%
-        xml2::read_html()
-      review_id <- item_html %>%
-        rvest::html_element(xpath = "//div") %>%
-        rvest::html_attr("data-review-id")
-      review_local_and_count <- item_html %>%
-        rvest::html_element(xpath = "/html/body/div/div/div[2]/div[2]/div[1]/button/div[2]") %>%
-        rvest::html_text() %>%
-        stringr::str_squish()
-      review_locality <- review_local_and_count %>%
-        stringr::str_extract_all("^[a-zA-Z\\s]*") %>%
-        stringr::str_squish()
-      review_total_reviews <- review_local_and_count %>%
-        stringr::str_extract_all("[0-9]+[a-zA-Z\\s]*$") %>%
-        stringr::str_squish() %>%
-        stringr::str_extract("[0-9]+") %>%
-        as.integer()
-      review_author <- item_html %>%
-        rvest::html_element(".d4r55") %>%
-        rvest::html_text() %>%
-        stringr::str_squish()
-      review_author_url <- item_html %>%
-        rvest::html_element(xpath = "/html/body/div/div/div[2]/div[2]/div[1]/button") %>%
-        rvest::html_attr("data-href") %>%
-        stringr::str_squish()
-      review_comment <- item_html %>%
-        # rvest::html_element(".MyEned") %>%
-        rvest::html_element(".wiI7pd") %>%
-        rvest::html_text() %>%
-        stringr::str_squish()
-      review_rating <- item_html %>%
-        rvest::html_element(".kvMYJc") %>%
-        rvest::html_attr("aria-label") %>%
-        stringr::str_remove_all("star[s]*") %>%
-        stringr::str_squish() %>%
-        as.integer()
-      review_date_relative <- item_html %>%
-        rvest::html_element(".rsqaWe") %>%
-        rvest::html_text() %>%
-        stringr::str_squish()
-      review_date_downloaded <- Sys.time()
-      review_date_absolute <- review_date_relative %>%
-        scrappy::duration2datetime(ref_time = review_date_downloaded)
-      tibble::tibble(
-        review_id,
-        review_author,
-        review_author_url,
-        review_comment,
-        review_rating,
-        review_locality,
-        review_total_reviews,
-        review_date_relative,
-        review_date_absolute,
-        review_date_downloaded
-      ) %>%
-        magrittr::set_names(names(.) %>% stringr::str_remove_all("review_"))
+      tryCatch({
+        expand_reviews_2(item) # expand long reviews
+        item_html <- item$getElementAttribute("innerHTML")[[1]] %>%
+          xml2::read_html()
+        review_id <- item_html %>%
+          rvest::html_element(xpath = "//div") %>%
+          rvest::html_attr("data-review-id")
+        review_local_and_count <- item_html %>%
+          rvest::html_element(xpath = "/html/body/div/div/div[2]/div[2]/div[1]/button/div[2]") %>%
+          rvest::html_text() %>%
+          stringr::str_squish()
+        review_locality <- review_local_and_count %>%
+          stringr::str_extract_all("^[a-zA-Z\\s]*") %>%
+          stringr::str_squish()
+        review_total_reviews <- review_local_and_count %>%
+          stringr::str_extract_all("[0-9]+[a-zA-Z\\s]*$") %>%
+          stringr::str_squish() %>%
+          stringr::str_extract("[0-9]+") %>%
+          as.integer()
+        review_author <- item_html %>%
+          rvest::html_element(".d4r55") %>%
+          rvest::html_text() %>%
+          stringr::str_squish()
+        review_author_url <- item_html %>%
+          rvest::html_element(xpath = "/html/body/div/div/div[2]/div[2]/div[1]/button") %>%
+          rvest::html_attr("data-href") %>%
+          stringr::str_squish()
+        review_comment <- item_html %>%
+          # rvest::html_element(".MyEned") %>%
+          rvest::html_element(".wiI7pd") %>%
+          rvest::html_text() %>%
+          stringr::str_squish()
+        review_rating <- item_html %>%
+          rvest::html_element(".kvMYJc") %>%
+          rvest::html_attr("aria-label") %>%
+          stringr::str_remove_all("star[s]*") %>%
+          stringr::str_squish() %>%
+          as.integer()
+        review_date_relative <- item_html %>%
+          rvest::html_element(".rsqaWe") %>%
+          rvest::html_text() %>%
+          stringr::str_squish()
+        review_date_downloaded <- Sys.time()
+        review_date_absolute <- review_date_relative %>%
+          scrappy::duration2datetime(ref_time = review_date_downloaded)
+        tibble::tibble(
+          review_id,
+          review_author,
+          review_author_url,
+          review_comment,
+          review_rating,
+          review_locality,
+          review_total_reviews,
+          review_date_relative,
+          review_date_absolute,
+          review_date_downloaded
+        ) %>%
+          magrittr::set_names(names(.) %>% stringr::str_remove_all("review_"))
+        },
+        error = function(e) {
+        })
     })
 }
 
@@ -435,7 +493,7 @@ scroll_reviews <- function(client,
 #' @keywords internal
 sort_reviews <- function(client,
                          using = "xpath",
-                         value_sort_btn = "//button[@data-value=\'Sort\']",
+                         value_sort_btn = "//button[contains(., 'Most relevant')]",
                          value_sort_options = "//div[@role=\'menuitemradio\']",
                          sleep = 1,
                          sort_index = 2) {
