@@ -397,46 +397,69 @@ parse_reviews <- function(reviews) {
         item_html <- item$getElementAttribute("innerHTML")[[1]] %>%
           xml2::read_html()
         review_id <- item_html %>%
-          rvest::html_element(xpath = "//div") %>%
+          rvest::html_element(xpath = "//button") %>%
           rvest::html_attr("data-review-id")
-        review_local_and_count <- item_html %>%
-          rvest::html_element(xpath = "/html/body/div/div/div[2]/div[2]/div[1]/button/div[2]") %>%
+        reviewer_details <- item_html %>%
+          rvest::html_elements(
+            xpath = "//button[contains(@jsaction, 'reviewerLink')]/div") %>%
           rvest::html_text() %>%
           stringr::str_squish()
-        review_locality <- review_local_and_count %>%
+        review_locality <- reviewer_details[2] %>%
           stringr::str_extract_all("^[a-zA-Z\\s]*") %>%
           stringr::str_squish()
-        review_total_reviews <- review_local_and_count %>%
-          stringr::str_extract_all("[0-9]+[a-zA-Z\\s]*$") %>%
+        review_total_reviews <- reviewer_details[2] %>%
+          stringr::str_extract_all("[0-9]+[a-zA-Z\\s]* reviews") %>%
           stringr::str_squish() %>%
           stringr::str_extract("[0-9]+") %>%
           as.integer()
-        review_author <- item_html %>%
-          rvest::html_element(".d4r55") %>%
-          rvest::html_text() %>%
+        review_author <- reviewer_details[1] %>%
           stringr::str_squish()
         review_author_url <- item_html %>%
-          rvest::html_element(xpath = "/html/body/div/div/div[2]/div[2]/div[1]/button") %>%
+          rvest::html_element(
+            xpath = "//button[contains(@jsaction, 'reviewerLink')]") %>%
           rvest::html_attr("data-href") %>%
           stringr::str_squish()
         review_comment <- item_html %>%
-          # rvest::html_element(".MyEned") %>%
           rvest::html_element(".wiI7pd") %>%
           rvest::html_text() %>%
           stringr::str_squish()
+        # obtain review's rating 1-5 stars
         review_rating <- item_html %>%
           rvest::html_element(".kvMYJc") %>%
           rvest::html_attr("aria-label") %>%
           stringr::str_remove_all("star[s]*") %>%
           stringr::str_squish() %>%
           as.integer()
+        ## alternative to review's rating
+        if (is.na(review_rating)) {
+          review_rating <- item_html %>%
+            rvest::html_element(".fzvQIb") %>%
+            rvest::html_text() %>%
+            stringr::str_squish() %>%
+            stringr::str_remove_all("/5$") %>%
+            as.integer()
+        }
+
+        # obtain review's relative date
         review_date_relative <- item_html %>%
           rvest::html_element(".rsqaWe") %>%
           rvest::html_text() %>%
           stringr::str_squish()
+        ## alternative to review's relative date
+        if (is.na(review_date_relative)) {
+        review_date_relative <- item_html %>%
+          rvest::html_element(".xRkPPb") %>%
+          rvest::html_text() %>%
+          stringr::str_remove_all("on\\s.*") %>%
+          stringr::str_squish()
+        }
+
+        # convert relative date to absolute based on date of extraction
         review_date_downloaded <- Sys.time()
         review_date_absolute <- review_date_relative %>%
           scrappy::duration2datetime(ref_time = review_date_downloaded)
+
+        # combine results
         tibble::tibble(
           review_id,
           review_author,
@@ -449,10 +472,9 @@ parse_reviews <- function(reviews) {
           review_date_absolute,
           review_date_downloaded
         ) %>%
-          magrittr::set_names(names(.) %>% stringr::str_remove_all("review_"))
-        },
-        error = function(e) {
-        })
+          magrittr::set_names(stringr::str_remove_all(names(.), "review_"))
+        }, error = function(e) {}
+      )
     })
 }
 
