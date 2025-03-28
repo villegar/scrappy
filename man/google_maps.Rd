@@ -33,8 +33,8 @@ on the web page.}
 number of existing reviews will define the actual number of reviews
 returned.}
 
-\item{max_date}{Maximum date for which reviews will be scraped. Default to
-the earliest review available (\code{Inf}).}
+\item{max_date}{Maximum (oldest) date for which reviews will be scraped.
+Default to the earliest review available (\code{Inf}).}
 
 \item{result_id}{Integer with the result position to use, only relevant when
 multiple matches for the given \code{name} are found.}
@@ -52,6 +52,7 @@ Scrape Google Maps' reviews
 \dontrun{
 # Create RSelenium session
 rD <- RSelenium::rsDriver(browser = "firefox", port = 4544L, verbose = FALSE)
+
 # Retrieve reviews for Sefton Park in Liverpool
 sefton_park_reviews_tb <-
   scrappy::google_maps(
@@ -69,6 +70,17 @@ sefton_park_reviews_tb_with_text <-
     max_reviews = 20,
     with_text = TRUE
   )
+
+sefton_park_reviews_tb_max_date <-
+  scrappy::google_maps(
+    client = rD$client,
+    name = "Sefton Park",
+    place_id = "ChIJrTCHJVkge0gRm1LWF0fSPgw",
+    max_reviews = Inf,
+    max_date = '2024-03-26',
+    with_text = TRUE
+  )
+
 # Stop server
 rD$server$stop()
 }

@@ -7,7 +7,7 @@
 sort_reviews(
   client,
   using = "xpath",
-  value_sort_btn = "//button[@data-value='Sort']",
+  value_sort_btn = "//button[contains(., 'Most relevant')]",
   value_sort_options = "//div[@role='menuitemradio']",
   sleep = 1,
   sort_index = 2
