@@ -24,11 +24,18 @@
 #' duration2datetime("2 weeks ago")
 #' duration2datetime("2 months ago")
 #' duration2datetime("2 years ago")
-duration2datetime <- function(str,
-                              ref_time = Sys.time(),
-                              output_format = "%Y-%m-%d %H:%M:%S %Z") {
+duration2datetime <- function(
+  str,
+  ref_time = Sys.time(),
+  output_format = "%Y-%m-%d %H:%M:%S %Z"
+) {
   tryCatch(
     {
+      # remove prefix when reviews have been edited
+      str <- str |>
+        stringr::str_remove("^Edited\\s+") |>
+        stringr::str_squish()
+
       if (stringr::str_detect(str, "month")) {
         value <- str %>%
           stringr::str_remove("month[s]* ago$") %>%
