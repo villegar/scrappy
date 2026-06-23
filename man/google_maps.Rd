@@ -77,7 +77,7 @@ sefton_park_reviews_tb_max_date <-
     name = "Sefton Park",
     place_id = "ChIJrTCHJVkge0gRm1LWF0fSPgw",
     max_reviews = Inf,
-    max_date = '2024-03-26',
+    max_date = "2024-03-26",
     with_text = TRUE
   )
 

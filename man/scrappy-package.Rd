@@ -21,5 +21,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Roberto Villegas-Diaz \email{r.villegas-diaz@outlook.com} (\href{https://orcid.org/0000-0001-5036-8661}{ORCID})
 
+Authors:
+\itemize{
+  \item Roberto Villegas-Diaz \email{r.villegas-diaz@outlook.com} (\href{https://orcid.org/0000-0001-5036-8661}{ORCID})
+}
+
 }
 \keyword{internal}
