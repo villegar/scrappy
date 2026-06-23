@@ -7,9 +7,11 @@
 #' @inheritParams google_maps
 #'
 #' @keywords internal
-expand_reviews <- function(client,
-                           using = "xpath",
-                           value = "//button[contains(@jsaction, 'expandReview')]") {
+expand_reviews <- function(
+  client,
+  using = "xpath",
+  value = "//button[contains(@jsaction, 'expandReview')]"
+) {
   find_elements(client, using, value) %>%
     purrr::walk(click_element)
 }
@@ -23,9 +25,11 @@ expand_reviews <- function(client,
 #' @param value String with css tag or xpath.
 #'
 #' @keywords internal
-expand_reviews_2 <- function(element,
-                             using = "xpath",
-                             value = "//button[contains(@jsaction, 'expandReview')]") {
+expand_reviews_2 <- function(
+  element,
+  using = "xpath",
+  value = "//button[contains(@jsaction, 'expandReview')]"
+) {
   find_child_element(element, using, value) %>%
     click_element()
 }
@@ -90,15 +94,17 @@ expand_reviews_2 <- function(element,
 #' # Stop server
 #' rD$server$stop()
 #' }
-google_maps <- function(client,
-                        name,
-                        place_id = NULL,
-                        base = "https://www.google.com/maps/search/?api=1&query=",
-                        sleep = 1,
-                        max_reviews = 100,
-                        max_date = Inf,
-                        result_id = 1,
-                        with_text = FALSE) {
+google_maps <- function(
+  client,
+  name,
+  place_id = NULL,
+  base = "https://www.google.com/maps/search/?api=1&query=",
+  sleep = 1,
+  max_reviews = 100,
+  max_date = Inf,
+  result_id = 1,
+  with_text = FALSE
+) {
   # local bindings
   . <- html_el_id <- date_absolute <- NULL
   # create URL by appending the name of the place to the base URL
@@ -133,6 +139,9 @@ google_maps <- function(client,
     navigate(client, new_url)
   }
 
+  # wait for the page to load
+  scrappy::wait_to_load(client = client, sleep = sleep)
+
   # get overall rating for the place
   overall_rating <- overall_rating(client)
   if (is.na(getElement(overall_rating, "total_reviews"))) {
@@ -154,12 +163,14 @@ google_maps <- function(client,
 
   # sort reviews by most recent
   ## first approach:'Sort' button
-  sort_reviews(client,
+  sort_reviews(
+    client,
     value_sort_btn = "//button[@data-value='Sort']",
     sleep = sleep
   )
   ## second approach: 'Most relevant' button
-  sort_reviews(client,
+  sort_reviews(
+    client,
     value_sort_btn = "//button[contains(., 'Most relevant')]",
     sleep = sleep
   )
@@ -252,11 +263,13 @@ google_maps <- function(client,
 #' @inheritParams google_maps
 #'
 #' @keywords internal
-handle_cookies <- function(client,
-                           using = "xpath",
-                           value = "//button[@aria-label=\'Reject all\']",
-                           accept_cookies = FALSE,
-                           sleep = 1) {
+handle_cookies <- function(
+  client,
+  using = "xpath",
+  value = "//button[@aria-label=\'Reject all\']",
+  accept_cookies = FALSE,
+  sleep = 1
+) {
   tryCatch(
     {
       suppressMessages({
@@ -265,9 +278,7 @@ handle_cookies <- function(client,
         scrappy::wait_to_load(client = client, sleep = sleep)
       })
     },
-    error = function(e) {
-
-    }
+    error = function(e) {}
   )
 }
 
@@ -278,10 +289,12 @@ handle_cookies <- function(client,
 #'
 #' @keywords internal
 open_overview_tab <-
-  function(client,
-           using = "xpath",
-           value = "//button[@role='tab' and contains(., 'Overview')]",
-           sleep = 1) {
+  function(
+    client,
+    using = "xpath",
+    value = "//button[@role='tab' and contains(., 'Overview')]",
+    sleep = 1
+  ) {
     suppressWarnings({
       find_and_click(client, using, value)
       Sys.sleep(sleep)
@@ -295,10 +308,12 @@ open_overview_tab <-
 #'
 #' @keywords internal
 open_reviews_tab <-
-  function(client,
-           using = "xpath",
-           value = "//button[@role='tab' and contains(., 'Reviews')]",
-           sleep = 1) {
+  function(
+    client,
+    using = "xpath",
+    value = "//button[@role='tab' and contains(., 'Reviews')]",
+    sleep = 1
+  ) {
     suppressWarnings({
       find_and_click(client, using, value)
       Sys.sleep(sleep)
@@ -313,9 +328,11 @@ open_reviews_tab <-
 #' @return Tibble with average number of stars and total reviews
 #'
 #' @keywords internal
-overall_rating <- function(client,
-                           using = "xpath",
-                           value = "//div[@jsaction=\'pane.reviewChart.moreReviews\']") {
+overall_rating <- function(
+  client,
+  using = "xpath",
+  value = "//div[@jsaction=\'pane.reviewChart.moreReviews\']"
+) {
   # Initialise outputs
   stars <- NA_real_
   total_reviews <- NA_integer_
@@ -416,7 +433,9 @@ parse_reviews <- function(reviews) {
 
           # review's author details
           reviewer_details <- item_html %>%
-            rvest::html_elements(xpath = "//button[contains(@jsaction, 'reviewerLink')]/div") %>%
+            rvest::html_elements(
+              xpath = "//button[contains(@jsaction, 'reviewerLink')]/div"
+            ) %>%
             rvest::html_text() %>%
             stringr::str_squish()
 
@@ -441,7 +460,9 @@ parse_reviews <- function(reviews) {
 
           # review's author profile URL
           review_author_url <- item_html %>%
-            rvest::html_element(xpath = "//button[contains(@jsaction, 'reviewerLink')]") %>%
+            rvest::html_element(
+              xpath = "//button[contains(@jsaction, 'reviewerLink')]"
+            ) %>%
             rvest::html_attr("data-href") %>%
             stringr::str_squish()
 
@@ -516,13 +537,16 @@ parse_reviews <- function(reviews) {
 #' @inheritParams google_maps
 #'
 #' @keywords internal
-scroll_reviews <- function(client,
-                           using = "css",
-                           value = "div.m6QErb.DxyBCb.kA9KIf.dS8AEf",
-                           scroll_px = 1000,
-                           sleep = 1) {
+scroll_reviews <- function(
+  client,
+  using = "css",
+  value = "div.m6QErb.DxyBCb.kA9KIf.dS8AEf",
+  scroll_px = 1000,
+  sleep = 1
+) {
   scrollable_div <- find_element(client, using, value)
-  execute_script(client,
+  execute_script(
+    client,
     script = paste0("arguments[0].scrollBy(0,", scroll_px, ");"),
     args = list(scrollable_div)
   )
@@ -542,12 +566,14 @@ scroll_reviews <- function(client,
 #' @inheritParams google_maps
 #'
 #' @keywords internal
-sort_reviews <- function(client,
-                         using = "xpath",
-                         value_sort_btn = "//button[contains(., 'Most relevant')]",
-                         value_sort_options = "//div[@role=\'menuitemradio\']",
-                         sleep = 1,
-                         sort_index = 2) {
+sort_reviews <- function(
+  client,
+  using = "xpath",
+  value_sort_btn = "//button[contains(., 'Most relevant')]",
+  value_sort_options = "//div[@role=\'menuitemradio\']",
+  sleep = 1,
+  sort_index = 2
+) {
   menu_bt <- find_element(client, using, value_sort_btn)
   click_element(menu_bt)
   Sys.sleep(sleep)
