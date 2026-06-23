@@ -16,3 +16,5 @@
 ^data-raw$
 ^\.lintr$
 ^README_cache$
+^\.positai$
+^\.claude$
