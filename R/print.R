@@ -1,15 +1,3 @@
-#' @title Print Values
-#'
-#' @param x an object used to select a method.
-#' @param ... further arguments passed to or from other methods.
-#' @rdname print
-#' @export
-#'
-#' @name print
-NULL
-
-#' Print Google Maps' reviews
-#' @rdname print
 #' @export
 print.gmaps_reviews <- function(x, ...) {
   name <- attr(x, "name")
