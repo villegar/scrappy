@@ -1,6 +1,6 @@
 Package: scrappy
 Title: A Simple Web Scraper
-Version: 0.0.3
+Version: 0.0.2
 Authors@R: c(
     person(given = "Roberto",
            family = "Villegas-Diaz",
